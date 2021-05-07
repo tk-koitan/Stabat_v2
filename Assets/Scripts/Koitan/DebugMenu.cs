@@ -23,6 +23,7 @@ namespace KoitanLib
         List<string> historyStrs = new List<string>();
         string historyStatement;
         Stack<Action> historyActs = new Stack<Action>();
+        Stack<int> historyIndexes = new Stack<int>();
         // Start is called before the first frame update
         void Start()
         {
@@ -31,11 +32,20 @@ namespace KoitanLib
         // Update is called once per frame
         void Update()
         {
-            if (!isOpen && Input.GetKeyDown(KeyCode.Tab))
+            if (Input.GetKeyDown(KeyCode.Tab))
             {
-                isOpen = true;
-                MainMenu();
+                if (isOpen)
+                {
+                    isOpen = false;
+                }
+                else
+                {
+                    isOpen = true;
+                    OpenRootPage(MainMenu);
+                }
             }
+
+
 
             if (!isOpen)
             {
@@ -58,6 +68,7 @@ namespace KoitanLib
                 {
                     historyStrs.RemoveAt(historyStrs.Count - 1);
                     historyActs.Pop()();
+                    currentIndex = historyIndexes.Pop();
                 }
                 else
                 {
@@ -74,6 +85,8 @@ namespace KoitanLib
             //描画
             if (historyStrs.Count > 0)
             {
+                //毎フレーム計算するのはよくない
+                historyStatement = String.Join(" > ", historyStrs);
                 KoitanDebug.Display($"{historyStatement} > {currentMenuName}\n");
             }
             else
@@ -99,9 +112,6 @@ namespace KoitanLib
         void MainMenu()
         {
             currentMenuName = "MainMenu";
-            currentAct = MainMenu;
-            historyStatement = String.Join(" > ", historyStrs);
-            currentIndex = 0;
             maxIndex = 3;
             statements[0] = () => $"TestMenu";
             statements[1] = () => $"Time.deltaTime = {Time.deltaTime}";
@@ -117,9 +127,6 @@ namespace KoitanLib
         void TestMenu()
         {
             currentMenuName = "TestMenu";
-            currentAct = TestMenu;
-            historyStatement = String.Join(" > ", historyStrs);
-            currentIndex = 0;
             maxIndex = 1;
             statements[0] = () => $"MainMennu";
             acts[0] = ButtonDownAct(() => MainMenu());
@@ -131,12 +138,27 @@ namespace KoitanLib
             {
                 if (Input.GetKeyDown(KeyCode.Z))
                 {
-                    //記憶しておく
-                    historyStrs.Add(currentMenuName);
-                    historyActs.Push(currentAct);
-                    act();
+                    EnterPage(act);
                 }
             };
+        }
+
+        void EnterPage(Action act)
+        {
+            //記憶しておく
+            historyStrs.Add(currentMenuName);
+            historyActs.Push(currentAct);
+            historyIndexes.Push(currentIndex);
+            currentIndex = 0;
+            currentAct = act;
+            act();
+        }
+
+        void OpenRootPage(Action act)
+        {
+            currentIndex = 0;
+            currentAct = act;
+            act();
         }
     }
 }
