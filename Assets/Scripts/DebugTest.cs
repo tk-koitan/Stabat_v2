@@ -14,7 +14,7 @@ public class DebugTest : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        KoitanDebug.Display("DebugTest");
+        KoitanDebug.Display("KoitanDebug.Displayのデバッグテストです");
         KoitanDebug.DisplayBox($"pos = {transform.position}", this);
     }
 }
