@@ -22,7 +22,7 @@ namespace KoitanLib
         //—š—ð
         List<string> historyStrs = new List<string>();
         string historyStatement;
-        Queue<Action> historyActs = new Queue<Action>();
+        Stack<Action> historyActs = new Stack<Action>();
         // Start is called before the first frame update
         void Start()
         {
@@ -57,7 +57,7 @@ namespace KoitanLib
                 if (historyActs.Count > 0)
                 {
                     historyStrs.RemoveAt(historyStrs.Count - 1);
-                    historyActs.Dequeue()();
+                    historyActs.Pop()();
                 }
                 else
                 {
@@ -133,7 +133,7 @@ namespace KoitanLib
                 {
                     //‹L‰¯‚µ‚Ä‚¨‚­
                     historyStrs.Add(currentMenuName);
-                    historyActs.Enqueue(currentAct);
+                    historyActs.Push(currentAct);
                     act();
                 }
             };
