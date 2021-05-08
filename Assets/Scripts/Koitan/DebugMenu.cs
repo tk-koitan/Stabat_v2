@@ -8,6 +8,7 @@ namespace KoitanLib
 {
     public class DebugMenu : MonoBehaviour
     {
+#if KOITAN_DEBUG
         //メニューを開いているか
         bool isOpen = false;
         //メニューの基本構成
@@ -24,14 +25,26 @@ namespace KoitanLib
         string historyStatement;
         Stack<Action> historyActs = new Stack<Action>();
         Stack<int> historyIndexes = new Stack<int>();
+
+        FPSCounter fpsCounter;
+        bool isShowFPS;
+
         // Start is called before the first frame update
         void Start()
         {
+            DontDestroyOnLoad(this);
+            TryGetComponent(out fpsCounter);
         }
 
         // Update is called once per frame
         void Update()
         {
+            //常時表示
+            if (isShowFPS)
+            {
+                KoitanDebug.Display($"FPS {fpsCounter.fps}\n");
+            }
+
             if (Input.GetKeyDown(KeyCode.Tab))
             {
                 if (isOpen)
@@ -41,11 +54,13 @@ namespace KoitanLib
                 else
                 {
                     isOpen = true;
-                    OpenRootPage(MainMenu);
+                    //OpenRootPage(MainMenu);
+                    if (historyActs.Count == 0)
+                    {
+                        EnterPage(MainMenu);
+                    }
                 }
             }
-
-
 
             if (!isOpen)
             {
@@ -64,10 +79,14 @@ namespace KoitanLib
             //キャンセル
             if (Input.GetKeyDown(KeyCode.X))
             {
-                if (historyActs.Count > 0)
+                if (historyActs.Count > 1)
                 {
                     historyStrs.RemoveAt(historyStrs.Count - 1);
-                    historyActs.Pop()();
+                    historyStatement = String.Join(" > ", historyStrs);
+                    //現在のページの履歴を消す
+                    historyActs.Pop();
+                    currentAct = historyActs.Peek();
+                    currentAct();
                     currentIndex = historyIndexes.Pop();
                 }
                 else
@@ -82,12 +101,12 @@ namespace KoitanLib
                 acts[currentIndex]();
             }
 
-            //描画
+            //描画            
             if (historyStrs.Count > 0)
             {
                 //毎フレーム計算するのはよくない
-                historyStatement = String.Join(" > ", historyStrs);
-                KoitanDebug.Display($"{historyStatement} > {currentMenuName}\n");
+                //KoitanDebug.Display($"{historyStatement}\n");
+                KoitanDebug.Display($"--- {currentMenuName} ---\n");
             }
             else
             {
@@ -113,23 +132,43 @@ namespace KoitanLib
         {
             currentMenuName = "MainMenu";
             maxIndex = 3;
-            statements[0] = () => $"TestMenu";
-            statements[1] = () => $"Time.deltaTime = {Time.deltaTime}";
-            statements[2] = () => $"Time.deltaTime = {Time.deltaTime}";
-            acts[0] = ButtonDownAct(() => TestMenu());
-            acts[1] = ButtonDownAct(() => TestMenu());
-            acts[2] = ButtonDownAct(() => TestMenu());
+            statements[0] = () => $"SoundMenu";
+            statements[1] = () => $"VideoMenu";
+            statements[2] = () => $"DisplayMenu";
+            acts[0] = ButtonDownAct(() => SoundMenu());
+            acts[1] = ButtonDownAct(() => VideoMenu());
+            acts[2] = ButtonDownAct(() => DisplayMenu());
         }
 
         /// <summary>
         /// テスト
         /// </summary>
-        void TestMenu()
+        void SoundMenu()
         {
-            currentMenuName = "TestMenu";
-            maxIndex = 1;
+            currentMenuName = "SoundMenu";
+            maxIndex = 2;
             statements[0] = () => $"MainMennu";
+            statements[1] = () => $"VideoMennu";
             acts[0] = ButtonDownAct(() => MainMenu());
+            acts[1] = ButtonDownAct(() => VideoMenu());
+        }
+
+        void VideoMenu()
+        {
+            currentMenuName = "VideoMenu";
+            maxIndex = 2;
+            statements[0] = () => $"MainMennu";
+            statements[1] = () => $"SoundMennu";
+            acts[0] = ButtonDownAct(() => MainMenu());
+            acts[1] = ButtonDownAct(() => SoundMenu());
+        }
+
+        void DisplayMenu()
+        {
+            currentMenuName = "DisplayMenu";
+            maxIndex = 1;
+            statements[0] = () => $"Show FPS < {(isShowFPS ? "ON" : "OFF")} >";
+            acts[0] = SelectIsShowFPS();
         }
 
         Action ButtonDownAct(Action act)
@@ -143,15 +182,38 @@ namespace KoitanLib
             };
         }
 
+        Action SelectIsShowFPS()
+        {
+            return () =>
+            {
+                if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.RightArrow))
+                {
+                    isShowFPS = !isShowFPS;
+                }
+            };
+        }
+
         void EnterPage(Action act)
         {
+            currentAct = act;
+            act();
             //記憶しておく
             historyStrs.Add(currentMenuName);
             historyActs.Push(currentAct);
             historyIndexes.Push(currentIndex);
+            //更新
             currentIndex = 0;
-            currentAct = act;
-            act();
+            historyStatement = String.Join(" > ", historyStrs);
+        }
+
+        void CancelPage(Action act)
+        {
+
+        }
+
+        string boolToStr(bool b)
+        {
+            return b ? "ON" : "OFF";
         }
 
         void OpenRootPage(Action act)
@@ -160,5 +222,6 @@ namespace KoitanLib
             currentAct = act;
             act();
         }
+#endif
     }
 }
