@@ -132,8 +132,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 372474234}
-  - component: {fileID: 372474233}
   - component: {fileID: 372474232}
+  - component: {fileID: 372474233}
   m_Layer: 0
   m_Name: DebugMenu
   m_TagString: Untagged

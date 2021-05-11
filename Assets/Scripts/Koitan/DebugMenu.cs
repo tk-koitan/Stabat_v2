@@ -8,12 +8,12 @@ namespace KoitanLib
 {
     public class DebugMenu : MonoBehaviour
     {
-#if KOITAN_DEBUG
         //メニューを開いているか
         bool isOpen = false;
         //メニューの基本構成
         //文章
         Func<string>[] statements = new Func<string>[16];
+        Func<string>[] infoMessages = new Func<string>[16];
         //アクション
         Action[] acts = new Action[16];
         int maxIndex = 16;
@@ -123,6 +123,7 @@ namespace KoitanLib
                     KoitanDebug.Display($"  {statements[i]()}\n");
                 }
             }
+            KoitanDebug.Display($"***INFO***\n{infoMessages[currentIndex]()}\n");
         }
 
         /// <summary>
@@ -130,14 +131,17 @@ namespace KoitanLib
         /// </summary>
         void MainMenu()
         {
-            currentMenuName = "MainMenu";
+            currentMenuName = "デバッグメニュー";
             maxIndex = 3;
-            statements[0] = () => $"SoundMenu";
-            statements[1] = () => $"VideoMenu";
-            statements[2] = () => $"DisplayMenu";
-            acts[0] = ButtonDownAct(() => SoundMenu());
-            acts[1] = ButtonDownAct(() => VideoMenu());
-            acts[2] = ButtonDownAct(() => DisplayMenu());
+            statements[0] = () => $"サウンド";
+            statements[1] = () => $"ディスプレイ";
+            statements[2] = () => $"常時表示情報";
+            acts[0] = ButtonDownAct(SoundMenu);
+            acts[1] = ButtonDownAct(VideoMenu);
+            acts[2] = ButtonDownAct(DisplayMenu);
+            infoMessages[0] = () => $"サウンド設定を開きます";
+            infoMessages[1] = () => $"ディスプレイ設定を開きます";
+            infoMessages[2] = () => $"常時表示情報設定を開きます";
         }
 
         /// <summary>
@@ -146,21 +150,34 @@ namespace KoitanLib
         void SoundMenu()
         {
             currentMenuName = "SoundMenu";
-            maxIndex = 2;
-            statements[0] = () => $"MainMennu";
-            statements[1] = () => $"VideoMennu";
-            acts[0] = ButtonDownAct(() => MainMenu());
-            acts[1] = ButtonDownAct(() => VideoMenu());
+            maxIndex = 3;
+            statements[0] = () => $"全体 < 8 >";
+            statements[1] = () => $"BGM < 8 >";
+            statements[2] = () => $"SE < 8 >";
+            acts[0] = NoneAction;
+            acts[1] = ButtonDownAct(NoneAction);
+            acts[2] = ButtonDownAct(NoneAction);
+            infoMessages[0] = () => $"全体の音量を調整できます";
+            infoMessages[1] = () => $"BGMの音量を調整できます";
+            infoMessages[2] = () => $"SEの音量を調整できます";
         }
 
         void VideoMenu()
         {
             currentMenuName = "VideoMenu";
-            maxIndex = 2;
-            statements[0] = () => $"MainMennu";
-            statements[1] = () => $"SoundMennu";
-            acts[0] = ButtonDownAct(() => MainMenu());
-            acts[1] = ButtonDownAct(() => SoundMenu());
+            maxIndex = 4;
+            statements[0] = () => $"フルスクリーン < ON >";
+            statements[1] = () => $"解像度 <1920 x 1080>";
+            statements[2] = () => $"VSync < 1 >";
+            statements[3] = () => $"ポストエフェクト < ON >";
+            acts[0] = NoneAction;
+            acts[1] = ButtonDownAct(NoneAction);
+            acts[2] = ButtonDownAct(NoneAction);
+            acts[3] = ButtonDownAct(NoneAction);
+            infoMessages[0] = () => $"フルスクリーンの設定";
+            infoMessages[1] = () => $"解像度を変更できます";
+            infoMessages[2] = () => $"Vsyncを変更できます";
+            infoMessages[3] = () => $"ポストエフェクト";
         }
 
         void DisplayMenu()
@@ -168,7 +185,8 @@ namespace KoitanLib
             currentMenuName = "DisplayMenu";
             maxIndex = 1;
             statements[0] = () => $"Show FPS < {(isShowFPS ? "ON" : "OFF")} >";
-            acts[0] = SelectIsShowFPS();
+            acts[0] = () => SelectBool(ref isShowFPS);
+            infoMessages[0] = () => $"FPSを常時表示できます";
         }
 
         Action ButtonDownAct(Action act)
@@ -180,6 +198,14 @@ namespace KoitanLib
                     EnterPage(act);
                 }
             };
+        }
+
+        void SelectBool(ref bool b)
+        {
+            if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.RightArrow))
+            {
+                b = !b;
+            }
         }
 
         Action SelectIsShowFPS()
@@ -206,6 +232,11 @@ namespace KoitanLib
             historyStatement = String.Join(" > ", historyStrs);
         }
 
+        void NoneAction()
+        {
+
+        }
+
         void CancelPage(Action act)
         {
 
@@ -222,6 +253,5 @@ namespace KoitanLib
             currentAct = act;
             act();
         }
-#endif
     }
 }
