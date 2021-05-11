@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Shader Graphs_New Shader Graph
-  m_Shader: {fileID: -6465566751694194690, guid: ed60d4d0002b98c4b8d67af7142efc02, type: 3}
+  m_Name: AlphaClipOutline
+  m_Shader: {fileID: -6465566751694194690, guid: e1a74a1e442c6164d8426dda45d7f23c, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -19,6 +19,10 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 7024824280609211287, guid: 4654fc54e42d8f7469752dd19d33f919, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -31,7 +35,9 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    m_Floats: []
+    m_Floats:
+    - Vector1_896f2ae200af4ce6b5da7ace5b41578b: 0.5
     m_Colors:
-    - Color_850d5d58862040b2b98e414609bfe7ae: {r: 0, g: 0, b: 0, a: 0}
+    - Color_dfa35c1fab02400d9d5570b8225b2498: {r: 1, g: 1, b: 1, a: 0.39607844}
+    - _Color: {r: 1, g: 1, b: 1, a: 0}
   m_BuildTextureStacks: []
