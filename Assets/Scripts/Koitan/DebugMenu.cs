@@ -34,6 +34,7 @@ namespace KoitanLib
         {
             DontDestroyOnLoad(this);
             TryGetComponent(out fpsCounter);
+            isShowFPS = true;
         }
 
         // Update is called once per frame
