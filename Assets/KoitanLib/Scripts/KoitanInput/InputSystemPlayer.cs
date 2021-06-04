@@ -26,6 +26,8 @@ namespace KoitanLib
         void Start()
         {
             Initialize();
+            //êlä‘
+            isHuman = true;
             TryGetComponent(out playerInput);
             StickInput = playerInput.currentActionMap.FindAction("Stick");
             foreach (ButtonCode code in Enum.GetValues(typeof(ButtonCode)))
@@ -34,8 +36,10 @@ namespace KoitanLib
                 currentInput.Add(code, playerInput.currentActionMap.FindAction(code.ToString()));
             }
             joinIndex = playerInput.playerIndex;
+            controllerName = playerInput.devices[0].displayName;
             //ìoò^
-            //KoitanInput.SetController(this);
+            //KoitanInput.SetHumanInput(this);
+            DontDestroyOnLoad(this);
         }
 
         // Update is called once per frame

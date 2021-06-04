@@ -2,7 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using KoitanLib;
+using Koitan;
 using System;
+using UnityEngine.SceneManagement;
+using UnityEngine.InputSystem;
 
 namespace KoitanLib
 {
@@ -28,6 +31,15 @@ namespace KoitanLib
 
         FPSCounter fpsCounter;
         bool isShowFPS;
+        int[,] resolutions = {
+            {640,360},
+            {720,405},
+            {960,540},
+            {1280,720},
+            {1440,810},
+            {1920,1080},
+        };
+        int resIndex = 3;
 
         // Start is called before the first frame update
         void Start()
@@ -35,6 +47,7 @@ namespace KoitanLib
             DontDestroyOnLoad(this);
             TryGetComponent(out fpsCounter);
             isShowFPS = true;
+            Screen.SetResolution(resolutions[resIndex, 0], resolutions[resIndex, 1], Screen.fullScreen);
         }
 
         // Update is called once per frame
@@ -46,7 +59,7 @@ namespace KoitanLib
                 KoitanDebug.Display($"FPS {fpsCounter.fps}\n");
             }
 
-            if (Input.GetKeyDown(KeyCode.Tab))
+            if (Input.GetKeyDown(KeyCode.Tab) || KoitanInput.GetDown(ButtonCode.Select))
             {
                 if (isOpen)
                 {
@@ -69,16 +82,16 @@ namespace KoitanLib
             }
 
             //カーソル移動
-            if (Input.GetKeyDown(KeyCode.UpArrow))
+            if (Input.GetKeyDown(KeyCode.UpArrow) || KoitanInput.GetDown(ButtonCode.Up))
             {
                 currentIndex = (currentIndex - 1 + maxIndex) % maxIndex;
             }
-            if (Input.GetKeyDown(KeyCode.DownArrow))
+            if (Input.GetKeyDown(KeyCode.DownArrow) || KoitanInput.GetDown(ButtonCode.Down))
             {
                 currentIndex = (currentIndex + 1 + maxIndex) % maxIndex;
             }
             //キャンセル
-            if (Input.GetKeyDown(KeyCode.X))
+            if (Input.GetKeyDown(KeyCode.X) || KoitanInput.GetDown(ButtonCode.B))
             {
                 if (historyActs.Count > 1)
                 {
@@ -113,18 +126,22 @@ namespace KoitanLib
             {
                 KoitanDebug.Display($"{currentMenuName}\n");
             }
-            for (int i = 0; i < maxIndex; i++)
+            for (int i = 0; i < 8; i++)
             {
                 if (i == currentIndex)
                 {
-                    KoitanDebug.Display($"> {statements[i]()}\n");
+                    KoitanDebug.Display($"●{statements[i]()}\n");
+                }
+                else if (i < maxIndex)
+                {
+                    KoitanDebug.Display($"　{statements[i]()}\n");
                 }
                 else
                 {
-                    KoitanDebug.Display($"  {statements[i]()}\n");
+                    KoitanDebug.Display($"\n");
                 }
             }
-            KoitanDebug.Display($"***INFO***\n{infoMessages[currentIndex]()}\n");
+            KoitanDebug.Display($"INFO...{infoMessages[currentIndex]()}\n");
         }
 
         /// <summary>
@@ -133,21 +150,27 @@ namespace KoitanLib
         void MainMenu()
         {
             currentMenuName = "デバッグメニュー";
-            maxIndex = 3;
+            maxIndex = 5;
             statements[0] = () => $"サウンド";
             statements[1] = () => $"ディスプレイ";
             statements[2] = () => $"常時表示情報";
+            statements[3] = () => $"バトル";
+            statements[4] = () => $"コントローラー設定";
             acts[0] = ButtonDownAct(SoundMenu);
             acts[1] = ButtonDownAct(VideoMenu);
             acts[2] = ButtonDownAct(DisplayMenu);
+            acts[3] = ButtonDownAct(BattleMenu);
+            acts[4] = ButtonDownAct(ControllerMenu);
             infoMessages[0] = () => $"サウンド設定を開きます";
             infoMessages[1] = () => $"ディスプレイ設定を開きます";
             infoMessages[2] = () => $"常時表示情報設定を開きます";
+            infoMessages[3] = () => $"バトル設定を開きます";
+            infoMessages[4] = () => $"コントローラー設定を開きます";
+            //追加できないように
+            PlayerInputManager.instance.DisableJoining();
         }
 
-        /// <summary>
-        /// テスト
-        /// </summary>
+
         void SoundMenu()
         {
             currentMenuName = "SoundMenu";
@@ -165,15 +188,15 @@ namespace KoitanLib
 
         void VideoMenu()
         {
-            currentMenuName = "VideoMenu";
+            currentMenuName = "ディスプレイ設定";
             maxIndex = 4;
-            statements[0] = () => $"フルスクリーン < ON >";
-            statements[1] = () => $"解像度 <1920 x 1080>";
-            statements[2] = () => $"VSync < 1 >";
+            statements[0] = () => $"フルスクリーン < {Screen.fullScreen} >";
+            statements[1] = () => $"解像度 < {resolutions[resIndex, 0]} x {resolutions[resIndex, 1]} >";
+            statements[2] = () => $"VSync < {QualitySettings.vSyncCount} >";
             statements[3] = () => $"ポストエフェクト < ON >";
-            acts[0] = NoneAction;
-            acts[1] = ButtonDownAct(NoneAction);
-            acts[2] = ButtonDownAct(NoneAction);
+            acts[0] = SelectFullScreen;
+            acts[1] = SelectResolution;
+            acts[2] = SelectVSync;
             acts[3] = ButtonDownAct(NoneAction);
             infoMessages[0] = () => $"フルスクリーンの設定";
             infoMessages[1] = () => $"解像度を変更できます";
@@ -190,35 +213,139 @@ namespace KoitanLib
             infoMessages[0] = () => $"FPSを常時表示できます";
         }
 
+        void BattleMenu()
+        {
+            currentMenuName = "バトルメニュー";
+            maxIndex = 3 + BattleSetting.playerCount;
+            statements[0] = () => $"バトル開始";
+            statements[1] = () => $"人数 < {BattleSetting.playerCount} >";
+            statements[2] = () => $"自動設定";
+            acts[0] = ButtonDownActNoHistory(BattleStart);
+            acts[1] = () =>
+            {
+                SelectInt(ref BattleSetting.playerCount, 2, BattleGlobal.MaxPlayerNum);
+                maxIndex = 3 + BattleSetting.playerCount;
+            };
+            acts[2] = ButtonDownAct(BattleAutoSetting);
+            infoMessages[0] = () => $"バトルを開始します";
+            infoMessages[1] = () => $"人数を設定します";
+            infoMessages[2] = () => $"現在のコントローラーの人間設定、残りをCPUで埋めます";
+
+            for (int i = 0; i < BattleGlobal.MaxPlayerNum; i++)
+            {
+                int tmpI = i;
+                statements[i + 3] = () => $"Player{tmpI}, {(ControllPlayer)BattleSetting.ControllPlayers[tmpI]}, {BattleSetting.teamColorIndexes[tmpI]}, {BattleSetting.playerIndexes[tmpI]}, {BattleSetting.charaColorIndexes[tmpI]}";
+                acts[i + 3] = ButtonDownAct(PlayerSetting(tmpI));
+                infoMessages[i + 3] = () => $"Player{tmpI}の設定を変更します";
+            }
+        }
+
+        void ControllerMenu()
+        {
+            currentMenuName = "コントローラー設定";
+            maxIndex = 1;
+            statements[0] = () => $"コントローラーをつなぎ直す";
+            acts[0] = ButtonDownActNoHistory(KoitanInput.ClearAllController);
+            infoMessages[0] = () => $"この画面でボタンを押すとコントローラーの登録ができます";
+            //コントローラーの受付
+            PlayerInputManager.instance.EnableJoining();
+        }
+
+        Action PlayerSetting(int index)
+        {
+            return () =>
+            {
+                currentMenuName = $"Player{index}Setting";
+                maxIndex = 4;
+                statements[0] = () => $"操作者 < {(ControllPlayer)BattleSetting.ControllPlayers[index]} >";
+                statements[1] = () => $"チーム < {BattleSetting.teamColorIndexes[index]} >";
+                statements[2] = () => $"プレイヤー番号 < {BattleSetting.playerIndexes[index]} >";
+                statements[3] = () => $"キャラカラー < {BattleSetting.charaColorIndexes[index]} >";
+                acts[0] = () => SelectInt(ref BattleSetting.ControllPlayers[index], 0, 2);
+                acts[1] = () => SelectInt(ref BattleSetting.teamColorIndexes[index], 0, BattleGlobal.MaxPlayerNum - 1);
+                acts[2] = () => SelectInt(ref BattleSetting.playerIndexes[index], 0, BattleGlobal.MaxPlayerNum - 1);
+                acts[3] = () => SelectInt(ref BattleSetting.charaColorIndexes[index], 0, BattleGlobal.MaxPlayerNum - 1);
+                infoMessages[0] = () => $"操作する人を変更できます";
+                infoMessages[1] = () => $"チームを変更できます";
+                infoMessages[2] = () => $"プレイヤー番号を変更できます";
+                infoMessages[3] = () => $"キャラカラーを変更できます";
+            };
+        }
+
         Action ButtonDownAct(Action act)
         {
             return () =>
             {
-                if (Input.GetKeyDown(KeyCode.Z))
+                if (Input.GetKeyDown(KeyCode.Z) || KoitanInput.GetDown(ButtonCode.A))
                 {
                     EnterPage(act);
                 }
             };
         }
 
+        Action ButtonDownActNoHistory(Action act)
+        {
+            return () =>
+            {
+                if (Input.GetKeyDown(KeyCode.Z) || KoitanInput.GetDown(ButtonCode.A))
+                {
+                    act();
+                }
+            };
+        }
+
+        void BattleStart()
+        {
+            KoitanInput.ClearAllCPU();
+            SceneManager.LoadScene("BattleScene");
+        }
+
+        void BattleAutoSetting()
+        {
+            for (int i = 0; i < BattleSetting.playerCount; i++)
+            {
+                if (i < KoitanInput.GetControllerNum())
+                {
+                    BattleSetting.ControllPlayers[i] = 1;
+                }
+                else
+                {
+                    BattleSetting.ControllPlayers[i] = 2;
+                }
+                BattleSetting.playerIndexes[i] = i;
+                BattleSetting.teamColorIndexes[i] = i;
+                BattleSetting.charaColorIndexes[i] = i;
+            }
+        }
+
+        void SelectInt(ref int i, int min, int max)
+        {
+            if (Input.GetKeyDown(KeyCode.LeftArrow) || KoitanInput.GetDown(ButtonCode.Left))
+            {
+                i--;
+                if (i < min)
+                {
+                    i = max;
+                }
+            }
+            if (Input.GetKeyDown(KeyCode.RightArrow) || KoitanInput.GetDown(ButtonCode.Right))
+            {
+                i++;
+                if (i > max)
+                {
+                    i = min;
+                }
+            }
+        }
+
         void SelectBool(ref bool b)
         {
-            if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.RightArrow))
+            if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.RightArrow) || KoitanInput.GetDown(ButtonCode.Left) || KoitanInput.GetDown(ButtonCode.Right))
             {
                 b = !b;
             }
         }
 
-        Action SelectIsShowFPS()
-        {
-            return () =>
-            {
-                if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.RightArrow))
-                {
-                    isShowFPS = !isShowFPS;
-                }
-            };
-        }
 
         void EnterPage(Action act)
         {
@@ -231,6 +358,60 @@ namespace KoitanLib
             //更新
             currentIndex = 0;
             historyStatement = String.Join(" > ", historyStrs);
+        }
+
+        void SelectFullScreen()
+        {
+            if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.RightArrow) || KoitanInput.GetDown(ButtonCode.Left) || KoitanInput.GetDown(ButtonCode.Right))
+            {
+                Screen.fullScreen = !Screen.fullScreen;
+            }
+        }
+
+        void SelectResolution()
+        {
+            if (Input.GetKeyDown(KeyCode.LeftArrow) || KoitanInput.GetDown(ButtonCode.Left))
+            {
+                resIndex--;
+                if (resIndex < 0)
+                {
+                    resIndex = 5;
+                }
+                Screen.SetResolution(resolutions[resIndex, 0], resolutions[resIndex, 1], Screen.fullScreen);
+            }
+            else if (Input.GetKeyDown(KeyCode.RightArrow) || KoitanInput.GetDown(ButtonCode.Right))
+            {
+                resIndex++;
+                if (resIndex > 5)
+                {
+                    resIndex = 0;
+                }
+                Screen.SetResolution(resolutions[resIndex, 0], resolutions[resIndex, 1], Screen.fullScreen);
+
+            }
+        }
+
+        void SelectVSync()
+        {
+            int vsync = QualitySettings.vSyncCount;
+            if (Input.GetKeyDown(KeyCode.LeftArrow) || KoitanInput.GetDown(ButtonCode.Left))
+            {
+                vsync--;
+                if (vsync < 0)
+                {
+                    vsync = 3;
+                }
+                QualitySettings.vSyncCount = vsync;
+            }
+            else if (Input.GetKeyDown(KeyCode.RightArrow) || KoitanInput.GetDown(ButtonCode.Right))
+            {
+                vsync++;
+                if (vsync > 3)
+                {
+                    vsync = 0;
+                }
+                QualitySettings.vSyncCount = vsync;
+            }
         }
 
         void NoneAction()

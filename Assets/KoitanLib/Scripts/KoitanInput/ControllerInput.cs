@@ -7,11 +7,13 @@ namespace KoitanLib
 {
     public abstract class ControllerInput : MonoBehaviour
     {
+        public bool isHuman { protected set; get; } = false;
         protected int controllerIndex = -1;
         protected Vector2 Stick = Vector2.zero;
         protected Dictionary<ButtonCode, bool> Button = new Dictionary<ButtonCode, bool>();
         protected Dictionary<ButtonCode, bool> oldButton = new Dictionary<ButtonCode, bool>();
         private Dictionary<ButtonCode, float> ButtonTime = new Dictionary<ButtonCode, float>();
+        public string controllerName { protected set; get; } = "Name";
 
         /// <summary>
         /// åpè≥êÊÇÃStartÇÃêÊì™Ç≈åƒÇÒÇ≈â∫Ç≥Ç¢
@@ -25,7 +27,7 @@ namespace KoitanLib
                 ButtonTime.Add(code, 0f);
             }
             //ìoò^
-            controllerIndex = KoitanInput.SetController(this);
+            controllerIndex = KoitanInput.SetHumanInput(this);
         }
 
         /// <summary>
@@ -73,6 +75,11 @@ namespace KoitanLib
         public Vector2 GetStick()
         {
             return Stick;
+        }
+
+        public void SetControllerIndex(int i)
+        {
+            controllerIndex = i;
         }
     }
 }

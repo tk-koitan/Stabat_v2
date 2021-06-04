@@ -9,9 +9,9 @@ namespace KoitanLib
     {
         public static KoitanInput instance;
         //List<InputSystemPlayer> inputSystemPlayers = new List<InputSystemPlayer>();
-        static List<ControllerInput> controllerInputList = new List<ControllerInput>();
+        static List<ControllerInput> ControllerInputList = new List<ControllerInput>();
         //List<int> joinIndexList = new List<int>();
-        public static Action[] actionListWhenPlayerJoin = new Action[10];
+        //public static Action[] actionListWhenPlayerJoin = new Action[10];
         [SerializeField]
         Koitan.SimpleAI ai;
         // Start is called before the first frame update
@@ -31,7 +31,8 @@ namespace KoitanLib
         // Update is called once per frame
         void Update()
         {
-            //順番変更           
+            //順番変更
+            /*
             for (int i = 0; i < controllerInputList.Count; i++)
             {
                 if (Input.GetKeyDown($"{i}"))
@@ -39,29 +40,72 @@ namespace KoitanLib
                     ControllerInput tmpCon = controllerInputList[i];
                     controllerInputList.RemoveAt(i);
                     controllerInputList.Insert(0, tmpCon);
+                    for (int j = 0; j < controllerInputList.Count; j++)
+                    {
+                        controllerInputList[j].SetControllerIndex(j);
+                    }
                 }
             }
+            */
+
+            //つなぎ直す
+            /*
+            if (Input.GetKeyDown(KeyCode.K))
+            {
+                for (int i = controllerInputList.Count - 1; i >= 0; i--)
+                {
+                    Destroy(controllerInputList[i].gameObject);
+                    controllerInputList[i] = null;
+                    controllerInputList.RemoveAt(i);
+                }
+            }
+            */
 
             //CPU追加
-            if (Input.GetKeyDown(KeyCode.P) && controllerInputList.Count < 10)
+            /*
+            if (Input.GetKeyDown(KeyCode.P) && controllerInputList.Count < Koitan.BattleGlobal.MaxPlayerNum)
             {
                 Instantiate(ai);
             }
+            */
 
             //デバッグ
             KoitanDebug.Display("Index : ABXYSStick\n");
-            for (int i = 0; i < controllerInputList.Count; i++)
+            for (int i = 0; i < ControllerInputList.Count; i++)
             {
-                ControllerInput controller = controllerInputList[i];
-                KoitanDebug.Display($"{i} : {(controller.Get(ButtonCode.A) ? "1" : "0")}{(controller.Get(ButtonCode.B) ? "1" : "0")}{(controller.Get(ButtonCode.X) ? "1" : "0")}{(controller.Get(ButtonCode.Y) ? "1" : "0")}{(controller.Get(ButtonCode.Start) ? "1" : "0")}{controller.GetStick()}\n");
+                ControllerInput controller = ControllerInputList[i];
+                KoitanDebug.Display($"{controller.controllerName} : {(controller.Get(ButtonCode.A) ? "1" : "0")}{(controller.Get(ButtonCode.B) ? "1" : "0")}{(controller.Get(ButtonCode.X) ? "1" : "0")}{(controller.Get(ButtonCode.Y) ? "1" : "0")}{(controller.Get(ButtonCode.Start) ? "1" : "0")}{controller.GetStick()}\n");
             }
         }
 
-        public static int SetController(ControllerInput ci)
+        public static int SetHumanInput(ControllerInput ci)
         {
-            controllerInputList.Add(ci);
-            actionListWhenPlayerJoin[controllerInputList.Count - 1].Invoke();
-            return controllerInputList.Count - 1;
+            ControllerInputList.Add(ci);
+            //actionListWhenPlayerJoin[controllerInputList.Count - 1]?.Invoke();
+            return ControllerInputList.Count - 1;
+        }
+
+        public static void ClearAllController()
+        {
+            for (int i = ControllerInputList.Count - 1; i >= 0; i--)
+            {
+                Destroy(ControllerInputList[i].gameObject);
+                ControllerInputList[i] = null;
+                ControllerInputList.RemoveAt(i);
+            }
+        }
+
+        public static void ClearAllCPU()
+        {
+            for (int i = ControllerInputList.Count - 1; i >= 0; i--)
+            {
+                if (ControllerInputList[i].GetType() != typeof(InputSystemPlayer))
+                {
+                    Destroy(ControllerInputList[i].gameObject);
+                    ControllerInputList[i] = null;
+                    ControllerInputList.RemoveAt(i);
+                }
+            }
         }
 
         /// <summary>
@@ -72,7 +116,7 @@ namespace KoitanLib
         /// <returns></returns>
         public static bool Get(ButtonCode code, int index)
         {
-            return index < controllerInputList.Count && controllerInputList[index].Get(code);
+            return index < ControllerInputList.Count && ControllerInputList[index].Get(code);
         }
 
         /// <summary>
@@ -80,11 +124,12 @@ namespace KoitanLib
         /// </summary>
         /// <param name="code"></param>
         /// <returns></returns>
-        public static bool Get(ButtonCode code)
+        public static bool Get(ButtonCode code, bool includeCPU = false)
         {
-            for (int i = 0; i < controllerInputList.Count; i++)
+            for (int i = 0; i < ControllerInputList.Count; i++)
             {
-                if (controllerInputList[i].Get(code))
+                if (!includeCPU && !ControllerInputList[i].isHuman) continue;
+                if (ControllerInputList[i].Get(code))
                 {
                     return true;
                 }
@@ -100,7 +145,7 @@ namespace KoitanLib
         /// <returns></returns>
         public static bool GetDown(ButtonCode code, int index)
         {
-            return index < controllerInputList.Count && controllerInputList[index].GetDown(code);
+            return index < ControllerInputList.Count && ControllerInputList[index].GetDown(code);
         }
 
         /// <summary>
@@ -108,11 +153,12 @@ namespace KoitanLib
         /// </summary>
         /// <param name="code"></param>
         /// <returns></returns>
-        public static bool GetDown(ButtonCode code)
+        public static bool GetDown(ButtonCode code, bool includeCPU = false)
         {
-            for (int i = 0; i < controllerInputList.Count; i++)
+            for (int i = 0; i < ControllerInputList.Count; i++)
             {
-                if (controllerInputList[i].GetDown(code))
+                if (!includeCPU && !ControllerInputList[i].isHuman) continue;
+                if (ControllerInputList[i].GetDown(code))
                 {
                     return true;
                 }
@@ -128,7 +174,7 @@ namespace KoitanLib
         /// <returns></returns>
         public static bool GetUp(ButtonCode code, int index)
         {
-            return index < controllerInputList.Count && controllerInputList[index].GetUp(code);
+            return index < ControllerInputList.Count && ControllerInputList[index].GetUp(code);
         }
 
         /// <summary>
@@ -136,11 +182,12 @@ namespace KoitanLib
         /// </summary>
         /// <param name="code"></param>
         /// <returns></returns>
-        public static bool GetUp(ButtonCode code)
+        public static bool GetUp(ButtonCode code, bool includeCPU = false)
         {
-            for (int i = 0; i < controllerInputList.Count; i++)
+            for (int i = 0; i < ControllerInputList.Count; i++)
             {
-                if (controllerInputList[i].GetUp(code))
+                if (!includeCPU && !ControllerInputList[i].isHuman) continue;
+                if (ControllerInputList[i].GetUp(code))
                 {
                     return true;
                 }
@@ -150,11 +197,16 @@ namespace KoitanLib
 
         public static Vector2 GetStick(int index)
         {
-            if (index < controllerInputList.Count)
+            if (index < ControllerInputList.Count)
             {
-                return controllerInputList[index].GetStick();
+                return ControllerInputList[index].GetStick();
             }
             return Vector2.zero;
+        }
+
+        public static int GetControllerNum()
+        {
+            return ControllerInputList.Count;
         }
     }
 
@@ -168,6 +220,7 @@ namespace KoitanLib
         X,
         Y,
         Start,
+        Select,
         Up,
         Down,
         Right,

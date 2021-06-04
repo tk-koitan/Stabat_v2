@@ -67,6 +67,14 @@ public class @KoitanControls : IInputActionCollection, IDisposable
                     ""interactions"": """"
                 },
                 {
+                    ""name"": ""Select"",
+                    ""type"": ""Button"",
+                    ""id"": ""b554a2af-a40d-42cb-b834-3a313210a80c"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
                     ""name"": ""Up"",
                     ""type"": ""Button"",
                     ""id"": ""89f82fce-0ba6-40e2-b2da-1a7d958d7bd3"",
@@ -704,6 +712,61 @@ public class @KoitanControls : IInputActionCollection, IDisposable
                     ""action"": ""Left"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8988c544-5164-4444-a005-0b1d732f280d"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Select"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9fa2b797-2efd-49d0-9673-6dcc0b4abfa7"",
+                    ""path"": ""<Gamepad>/select"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Select"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bda16e61-d838-4ad4-abd8-dccc3e636d33"",
+                    ""path"": ""<HID::HORI CO.,LTD  PAD A>/button9"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Select"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4b856267-5a68-447d-9818-730e9988f12b"",
+                    ""path"": ""<HID::Nintendo Wireless Gamepad>/button10"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Select"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9e25c6b1-1522-4893-b73e-7d07b9b80ecc"",
+                    ""path"": ""<HID::Nintendo Wireless Gamepad>/button9"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Select"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -718,6 +781,7 @@ public class @KoitanControls : IInputActionCollection, IDisposable
         m_Platform_X = m_Platform.FindAction("X", throwIfNotFound: true);
         m_Platform_Y = m_Platform.FindAction("Y", throwIfNotFound: true);
         m_Platform_Start = m_Platform.FindAction("Start", throwIfNotFound: true);
+        m_Platform_Select = m_Platform.FindAction("Select", throwIfNotFound: true);
         m_Platform_Up = m_Platform.FindAction("Up", throwIfNotFound: true);
         m_Platform_Down = m_Platform.FindAction("Down", throwIfNotFound: true);
         m_Platform_Right = m_Platform.FindAction("Right", throwIfNotFound: true);
@@ -777,6 +841,7 @@ public class @KoitanControls : IInputActionCollection, IDisposable
     private readonly InputAction m_Platform_X;
     private readonly InputAction m_Platform_Y;
     private readonly InputAction m_Platform_Start;
+    private readonly InputAction m_Platform_Select;
     private readonly InputAction m_Platform_Up;
     private readonly InputAction m_Platform_Down;
     private readonly InputAction m_Platform_Right;
@@ -791,6 +856,7 @@ public class @KoitanControls : IInputActionCollection, IDisposable
         public InputAction @X => m_Wrapper.m_Platform_X;
         public InputAction @Y => m_Wrapper.m_Platform_Y;
         public InputAction @Start => m_Wrapper.m_Platform_Start;
+        public InputAction @Select => m_Wrapper.m_Platform_Select;
         public InputAction @Up => m_Wrapper.m_Platform_Up;
         public InputAction @Down => m_Wrapper.m_Platform_Down;
         public InputAction @Right => m_Wrapper.m_Platform_Right;
@@ -822,6 +888,9 @@ public class @KoitanControls : IInputActionCollection, IDisposable
                 @Start.started -= m_Wrapper.m_PlatformActionsCallbackInterface.OnStart;
                 @Start.performed -= m_Wrapper.m_PlatformActionsCallbackInterface.OnStart;
                 @Start.canceled -= m_Wrapper.m_PlatformActionsCallbackInterface.OnStart;
+                @Select.started -= m_Wrapper.m_PlatformActionsCallbackInterface.OnSelect;
+                @Select.performed -= m_Wrapper.m_PlatformActionsCallbackInterface.OnSelect;
+                @Select.canceled -= m_Wrapper.m_PlatformActionsCallbackInterface.OnSelect;
                 @Up.started -= m_Wrapper.m_PlatformActionsCallbackInterface.OnUp;
                 @Up.performed -= m_Wrapper.m_PlatformActionsCallbackInterface.OnUp;
                 @Up.canceled -= m_Wrapper.m_PlatformActionsCallbackInterface.OnUp;
@@ -856,6 +925,9 @@ public class @KoitanControls : IInputActionCollection, IDisposable
                 @Start.started += instance.OnStart;
                 @Start.performed += instance.OnStart;
                 @Start.canceled += instance.OnStart;
+                @Select.started += instance.OnSelect;
+                @Select.performed += instance.OnSelect;
+                @Select.canceled += instance.OnSelect;
                 @Up.started += instance.OnUp;
                 @Up.performed += instance.OnUp;
                 @Up.canceled += instance.OnUp;
@@ -880,6 +952,7 @@ public class @KoitanControls : IInputActionCollection, IDisposable
         void OnX(InputAction.CallbackContext context);
         void OnY(InputAction.CallbackContext context);
         void OnStart(InputAction.CallbackContext context);
+        void OnSelect(InputAction.CallbackContext context);
         void OnUp(InputAction.CallbackContext context);
         void OnDown(InputAction.CallbackContext context);
         void OnRight(InputAction.CallbackContext context);
