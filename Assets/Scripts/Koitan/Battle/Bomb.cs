@@ -90,6 +90,7 @@ namespace Koitan
                 }
                 else if (collision.tag == "Bomb")
                 {
+                    if (collision.isTrigger) return;
                     collision.transform.parent.GetComponent<Bomb>().Explosion();
                 }
             }

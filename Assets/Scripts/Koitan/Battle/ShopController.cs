@@ -20,7 +20,7 @@ namespace Koitan
         [SerializeField]
         Money moneyPrefab;
         Money moneyInstance;
-        bool isBuild;
+        public bool isBuild { get; private set; }
         bool isBroken;
         float moneyLostingTime = 0;
         float moneyCreateIntevalTime = 2f;
@@ -50,6 +50,10 @@ namespace Koitan
                 {
                     BrokenShop();
                 }
+            }
+            if (isBroken)
+            {
+
             }
         }
 

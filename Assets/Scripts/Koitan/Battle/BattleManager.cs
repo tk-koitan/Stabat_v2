@@ -36,6 +36,9 @@ namespace Koitan
         [SerializeField]
         float intervalTime;
         float itemCreateTime;
+        [SerializeField]
+        ShopController[] shops;
+        public static ShopController[] Shops => instance.shops;
         // Start is called before the first frame update
         void Awake()
         {

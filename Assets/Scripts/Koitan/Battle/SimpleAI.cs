@@ -35,10 +35,11 @@ namespace Koitan
 
             if (Input.GetMouseButtonDown(0))
             {
+                /*
                 Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 mousePos.z = 0;
-                path = StageGraph.instance.GetPath(myPos, mousePos);
-                retryTime = 0;
+                */
+                SearchPath();
             }
             if (Input.GetMouseButtonDown(1))
             {
@@ -64,6 +65,7 @@ namespace Koitan
             }
             else
             {
+                SearchPath();
                 return;
             }
 
@@ -72,7 +74,7 @@ namespace Koitan
                 PressButtonTime(ButtonCode.B, 0.2f);
             }
             float distance = (otherPos - myPos).magnitude;
-            if (distance > 3f)
+            if (distance > 2f)
             {
                 if (otherPos.x - myPos.x > 0f)
                 {
@@ -87,7 +89,32 @@ namespace Koitan
             {
                 path.RemoveAt(0);
                 retryTime = 0;
+                if (path.Count == 0)
+                {
+                    Button[ButtonCode.A] = true;
+                }
             }
+        }
+
+        public void SearchPath()
+        {
+            Vector3 shopPos = myPos;
+            float shopDist = 1000000;
+            foreach (ShopController shop in BattleManager.Shops)
+            {
+                if (!shop.isBuild)
+                {
+                    Vector3 tmpShopPos = shop.transform.position;
+                    float dist = Vector3.Distance(myPos, tmpShopPos);
+                    if (dist < shopDist)
+                    {
+                        shopDist = dist;
+                        shopPos = tmpShopPos;
+                    }
+                }
+            }
+            path = StageGraph.instance.GetPath(myPos, shopPos);
+            retryTime = 0;
         }
 
         private void OnDrawGizmos()
