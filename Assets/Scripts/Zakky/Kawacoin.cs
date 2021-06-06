@@ -10,9 +10,10 @@ public class Kawacoin : MonoBehaviour
     
     [SerializeField]
     CursorHand cursorHand;
-    public CursorHand CursorHand { get; private set; }
     [SerializeField]
     PlayerController playerController;
+    public CursorHand CursorHand { get; private set; }
+    public bool IsDecided { get; private set; }
 
     Vector3 iniScale;
     CircleCollider2D circleCollider2D;
@@ -36,6 +37,8 @@ public class Kawacoin : MonoBehaviour
     {
         Collider2D[] collisions = Physics2D.OverlapCircleAll(transform.position, circleCollider2D.radius);
 
+        IsDecided = false;
+
         foreach (Collider2D col in collisions)
         {
             //アイコンに触れてるなら，さらにカーソルおいてるなら
@@ -43,9 +46,12 @@ public class Kawacoin : MonoBehaviour
             {
                 //キャラクター変える
                 int tmp = col.GetComponent<CharaIcon>().CharaID;
-
+                //表示されたキャラの色変える
                 playerController.ChangeColor(tmp, tmp);
+                //内部での色も変える
                 BattleSetting.charaColorIndexes[CursorHand.ID] = tmp;
+
+                IsDecided = true;
             }
         }
     }
