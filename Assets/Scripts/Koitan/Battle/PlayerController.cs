@@ -126,6 +126,11 @@ namespace Koitan
             charaColorChanger.ChangeColor(playerIndex, teamIndex);
         }
 
+        public void AddPowerVec(Vector2 vec)
+        {
+            motor.velocity = vec;
+        }
+
         private void OnTriggerStay2D(Collider2D collision)
         {
             switch (collision.tag)
