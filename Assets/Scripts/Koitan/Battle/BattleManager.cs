@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using KoitanLib;
 using Cinemachine;
+using UnityEngine.SceneManagement;
 
 namespace Koitan
 {
@@ -107,6 +108,12 @@ namespace Koitan
                     break;
                 }
             }
+        }
+
+        public static void StartBattle()
+        {
+            KoitanInput.ClearAllCPU();
+            SceneManager.LoadScene(BattleGlobal.stageSceneNames[BattleSetting.battleStageIndex]);
         }
 
         private void OnDrawGizmosSelected()
