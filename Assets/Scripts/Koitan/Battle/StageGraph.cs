@@ -391,7 +391,7 @@ namespace Koitan
                         int splitNum = (int)(minToMax.magnitude / perLength);
                         if (splitNum == 0) continue;
                         //Debug.Log($"{collider.gameObject.name} : {collider.gameObject.layer}");
-                        for (int i = -1; i <= splitNum + 1; i++)
+                        for (int i = 0; i <= splitNum; i++)
                         {
                             RaycastHit2D hit;
                             Vector3 rayOrigin = ul + i * minToMax / splitNum + collider.transform.up * 1f;
