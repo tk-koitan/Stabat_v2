@@ -216,27 +216,34 @@ namespace KoitanLib
         void BattleMenu()
         {
             currentMenuName = "バトルメニュー";
-            maxIndex = 3 + BattleSetting.playerCount;
+            maxIndex = 4 + BattleSetting.playerCount;
             statements[0] = () => $"バトル開始";
-            statements[1] = () => $"人数 < {BattleSetting.playerCount} >";
-            statements[2] = () => $"自動設定";
+            statements[1] = () => $"ステージ < {BattleSetting.battleStageIndex} >";
+            statements[2] = () => $"人数 < {BattleSetting.playerCount} >";
+            statements[3] = () => $"自動設定";
             acts[0] = ButtonDownActNoHistory(BattleStart);
             acts[1] = () =>
             {
-                SelectInt(ref BattleSetting.playerCount, 2, BattleGlobal.MaxPlayerNum);
-                maxIndex = 3 + BattleSetting.playerCount;
+                SelectInt(ref BattleSetting.battleStageIndex, 0, BattleGlobal.stageSceneNames.Length - 1);
+                maxIndex = 4 + BattleSetting.playerCount;
             };
-            acts[2] = ButtonDownAct(BattleAutoSetting);
+            acts[2] = () =>
+            {
+                SelectInt(ref BattleSetting.playerCount, 2, BattleGlobal.MaxPlayerNum);
+                maxIndex = 4 + BattleSetting.playerCount;
+            };
+            acts[3] = ButtonDownAct(BattleAutoSetting);
             infoMessages[0] = () => $"バトルを開始します";
-            infoMessages[1] = () => $"人数を設定します";
-            infoMessages[2] = () => $"現在のコントローラーの人間設定、残りをCPUで埋めます";
+            infoMessages[1] = () => $"ステージを設定します";
+            infoMessages[2] = () => $"人数を設定します";
+            infoMessages[3] = () => $"現在のコントローラーの人間設定、残りをCPUで埋めます";
 
             for (int i = 0; i < BattleGlobal.MaxPlayerNum; i++)
             {
                 int tmpI = i;
-                statements[i + 3] = () => $"Player{tmpI}, {(ControllPlayer)BattleSetting.ControllPlayers[tmpI]}, {BattleSetting.teamColorIndexes[tmpI]}, {BattleSetting.playerIndexes[tmpI]}, {BattleSetting.charaColorIndexes[tmpI]}";
-                acts[i + 3] = ButtonDownAct(PlayerSetting(tmpI));
-                infoMessages[i + 3] = () => $"Player{tmpI}の設定を変更します";
+                statements[i + 4] = () => $"Player{tmpI}, {(ControllPlayer)BattleSetting.ControllPlayers[tmpI]}, {BattleSetting.teamColorIndexes[tmpI]}, {BattleSetting.playerIndexes[tmpI]}, {BattleSetting.charaColorIndexes[tmpI]}";
+                acts[i + 4] = ButtonDownAct(PlayerSetting(tmpI));
+                infoMessages[i + 4] = () => $"Player{tmpI}の設定を変更します";
             }
         }
 
@@ -296,8 +303,7 @@ namespace KoitanLib
 
         void BattleStart()
         {
-            KoitanInput.ClearAllCPU();
-            SceneManager.LoadScene("BattleScene");
+            BattleManager.StartBattle();
         }
 
         void BattleAutoSetting()

@@ -71,6 +71,7 @@ namespace Koitan
                 moneyInstance.SetTeamColor(-1);
                 moneyInstance.GetRigidbody().isKinematic = false;
                 moneyInstance.SetSpeed(0);
+                moneyInstance.transform.SetParent(null);
             }
         }
 
@@ -80,6 +81,7 @@ namespace Koitan
             moneyInstance.SetTeamColor(teamIndex);
             moneyInstance.GetRigidbody().isKinematic = true;
             moneyInstance.SetSpeed(500);
+            moneyInstance.transform.SetParent(transform);
         }
     }
 }
