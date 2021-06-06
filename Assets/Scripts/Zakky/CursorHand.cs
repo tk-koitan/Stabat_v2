@@ -22,6 +22,7 @@ public class CursorHand : MonoBehaviour
 
     public bool Havecoin { get; private set; }
     public int ID { get; private set; }
+    public bool IsDicided { get; private set; }
 
     // Start is called before the first frame update
     void Start()
@@ -57,11 +58,18 @@ public class CursorHand : MonoBehaviour
 
         foreach (Collider2D col in collisions)
         {
-            if (KoitanInput.GetDown(ButtonCode.A, ID) &&
-            col.tag == "Chip" &&
-            col.GetComponent<Kawacoin>().CursorHand.ID == ID)
+            if ((KoitanInput.GetDown(ButtonCode.A, ID) &&
+                col.tag == "Chip" &&
+                col.GetComponent<Kawacoin>().CursorHand.ID == ID)
+                ||
+                KoitanInput.GetDown(ButtonCode.B, ID))
             {
+                IsDicided = true;
                 Havecoin = !Havecoin;
+            }
+            else
+            {
+                IsDicided = false;
             }
         }
     }

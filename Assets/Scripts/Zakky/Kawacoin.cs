@@ -10,14 +10,18 @@ public class Kawacoin : MonoBehaviour
     
     [SerializeField]
     CursorHand cursorHand;
+    //[SerializeField]
+    //CharaIcon charaIcon;
     public CursorHand CursorHand { get; private set; }
     [SerializeField]
     PlayerController playerController;
-    
+
+    Vector3 iniScale;
 
     void Start()
     {
         CursorHand = cursorHand;
+        iniScale = transform.localScale;
     }
 
     // Update is called once per frame
@@ -25,8 +29,7 @@ public class Kawacoin : MonoBehaviour
     {
         IsCollision();
 
-        if (cursorHand.Havecoin) transform.DOScale(1.3f, 0.1f);
-        else transform.DOScale(1f, 0.1f);
+        Scaler();
     }
 
     void IsCollision()
@@ -35,15 +38,14 @@ public class Kawacoin : MonoBehaviour
 
         foreach (Collider2D col in collisions)
         {
+            //アイコンに触れてるなら
             if (col.tag == "CharaIcon")
             {
+                //さらにカーソルおいてるなら
                 if (!cursorHand.Havecoin)
                 {
-                    //BattleSetting.playerIndexes[ID] = col.GetComponent<CharaIcon>().CharaID;
+                    //キャラクター変える
                     playerController.ChangeColor(col.GetComponent<CharaIcon>().CharaID, col.GetComponent<CharaIcon>().CharaID);
-                    Debug.Log("Selected");
-                    //collision.GetComponent<SelectCharacter>();
-                    //演出
                 }
                 else
                 {
@@ -51,5 +53,11 @@ public class Kawacoin : MonoBehaviour
                 }
             }
         }
+    }
+
+    void Scaler()
+    {
+        if (cursorHand.Havecoin) transform.DOScale(1.3f, 0.1f);
+        else transform.DOScale(1f, 0.1f);
     }
 }
