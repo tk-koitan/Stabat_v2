@@ -21,8 +21,11 @@ namespace Koitan
         Money moneyPrefab;
         Money moneyInstance;
         bool isBuild;
+        bool isBroken;
         float moneyLostingTime = 0;
-        float moneyCreateIntevalTime = 1f;
+        float moneyCreateIntevalTime = 2f;
+        float shopLostingTime = 0f;
+        float landCreateIntervalTime = 2f;
         // Start is called before the first frame update
         void Start()
         {
@@ -50,6 +53,11 @@ namespace Koitan
             }
         }
 
+        public void CreateLand()
+        {
+
+        }
+
         public void BuildShop(int teamIndex)
         {
             isBuild = true;
@@ -64,6 +72,7 @@ namespace Koitan
         public void BrokenShop()
         {
             isBuild = false;
+            isBroken = true;
             landParent.gameObject.SetActive(true);
             shopParent.gameObject.SetActive(false);
             if (moneyInstance != null)

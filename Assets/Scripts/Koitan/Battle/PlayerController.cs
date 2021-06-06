@@ -14,8 +14,9 @@ namespace Koitan
         public int teamIndex = -1;
         Animator animator;
         PlatformerMotor2D motor;
-        [SerializeField]
-        GameObject mesh;
+        //[SerializeField]
+        //GameObject mesh;
+        CharaColorChanger charaColorChanger;
         [SerializeField]
         CharaLibrarySets librarySets;
         ShopController nearShop = null;
@@ -25,10 +26,11 @@ namespace Koitan
         Transform handTf;
         float inoperableTime = 0f;
         // Start is called before the first frame update
-        void Start()
+        void Awake()
         {
             TryGetComponent(out animator);
             TryGetComponent(out motor);
+            TryGetComponent(out charaColorChanger);
             /*
             mesh.SetActive(false);
             motor.enabled = false;
@@ -40,7 +42,7 @@ namespace Koitan
         void Update()
         {
             //”ñ•\Ž¦‚È‚ç“®‚©‚³‚È‚¢
-            if (!mesh.activeSelf) return;
+            //if (!mesh.activeSelf) return;
 
             animator.SetBool("Fall", motor.IsFalling());
             animator.SetBool("Ground", motor.IsGrounded());
@@ -103,13 +105,6 @@ namespace Koitan
             }
         }
 
-        void ActionWhenPlayerJoin()
-        {
-            mesh.SetActive(true);
-            motor.enabled = true;
-            BattleManager.TargetGroup.AddMember(transform, 1f, 3f);
-        }
-
         public void SetInoperableTime(float time)
         {
             inoperableTime = time;
@@ -128,12 +123,7 @@ namespace Koitan
         {
             this.playerIndex = playerIndex;
             this.teamIndex = teamIndex;
-            SpriteLibrary sl = mesh.transform.Find("body").GetComponent<SpriteLibrary>();
-            sl.spriteLibraryAsset = librarySets.librarys[playerIndex];
-            foreach (SpriteRenderer sr in mesh.transform.Find("outline").GetComponentsInChildren<SpriteRenderer>())
-            {
-                sr.color = BattleManager.ColorSets.colors[teamIndex];
-            }
+            charaColorChanger.ChangeColor(playerIndex, teamIndex);
         }
 
         private void OnTriggerStay2D(Collider2D collision)

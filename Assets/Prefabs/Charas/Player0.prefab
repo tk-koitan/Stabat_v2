@@ -1270,6 +1270,7 @@ GameObject:
   - component: {fileID: 338428582370640899}
   - component: {fileID: 338428582370640896}
   - component: {fileID: 338428582370640900}
+  - component: {fileID: 879004480102503674}
   m_Layer: 0
   m_Name: Player0
   m_TagString: Player
@@ -1424,7 +1425,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerIndex: 0
   teamIndex: -1
-  mesh: {fileID: 338428582475242171}
   librarySets: {fileID: 11400000, guid: c3c4f0eae32b8f0498f0a15b2ec8aeb4, type: 2}
   handTf: {fileID: 338428583751148422}
 --- !u!50 &338428582370640900
@@ -1448,6 +1448,21 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &879004480102503674
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 338428582370640903}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e550dba8edf9ce343ab9ae144b53654d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mesh: {fileID: 338428582475242171}
+  charaColorSets: {fileID: 11400000, guid: c3c4f0eae32b8f0498f0a15b2ec8aeb4, type: 2}
+  outlineSets: {fileID: 11400000, guid: 7c386f2e077bc9747b789a948a5aaeb6, type: 2}
 --- !u!1 &338428582433523639
 GameObject:
   m_ObjectHideFlags: 0
