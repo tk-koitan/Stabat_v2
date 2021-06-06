@@ -264,6 +264,17 @@ public class @KoitanControls : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""c170be04-9324-46e7-9878-8858c98329ef"",
+                    ""path"": ""<HID::JC-U3613M - DirectXInput Mode>/button4"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""A"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""84bdb697-ad6a-4425-a118-0631263c590c"",
                     ""path"": ""<Keyboard>/x"",
                     ""interactions"": """",

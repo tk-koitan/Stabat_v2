@@ -10,22 +10,26 @@ public class CursorHand : MonoBehaviour
     [SerializeField]
     float cursorVelocity = 1f;
     [SerializeField]
-    GameObject Kawacoin;
-    
+    Transform kawacoinTrans;
+    [SerializeField]
+    Kawacoin kawacoin;
+    [SerializeField]
+    int id;
+
 
     Rigidbody2D rigidbody2D;
     Kawacoin kawakoin;
-    //List<Collider2D> colList;
 
     public bool Havecoin { get; private set; }
+    public int ID { get; private set; }
 
     // Start is called before the first frame update
     void Start()
     {
         rigidbody2D = GetComponent<Rigidbody2D>();
-        kawakoin = Kawacoin.GetComponent<Kawacoin>();
-        //colList = new List<Collider2D>();
+        //kawakoin = Kawacoin.GetComponent<Kawacoin>();
         Havecoin = false;
+        ID = id;
     }
 
     // Update is called once per frame
@@ -38,12 +42,12 @@ public class CursorHand : MonoBehaviour
 
     void Move()
     {
-        rigidbody2D.velocity += cursorVelocity * KoitanInput.GetStick(kawakoin.ID);
+        rigidbody2D.velocity += cursorVelocity * KoitanInput.GetStick(ID);
 
         if (Havecoin)
         {
             Vector3 ofs = GetComponent<CircleCollider2D>().offset;
-            Kawacoin.transform.DOMove(transform.position + ofs , 0.1f);
+            kawacoinTrans.DOMove(transform.position + ofs , 0.1f);
         }
     }
 
@@ -53,9 +57,9 @@ public class CursorHand : MonoBehaviour
 
         foreach (Collider2D col in collisions)
         {
-            if (KoitanInput.GetDown(ButtonCode.A) &&
+            if (KoitanInput.GetDown(ButtonCode.A, ID) &&
             col.tag == "Chip" &&
-            col.GetComponent<Kawacoin>().ID == Kawacoin.GetComponent<Kawacoin>().ID)
+            col.GetComponent<Kawacoin>().CursorHand.ID == ID)
             {
                 Havecoin = !Havecoin;
             }

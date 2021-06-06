@@ -7,22 +7,17 @@ using Koitan;
 public class Kawacoin : MonoBehaviour
 {
     // Start is called before the first frame update
-    [SerializeField]
-    int id;
+    
     [SerializeField]
     CursorHand cursorHand;
-    //[SerializeField]
-    //GameObject Player;
+    public CursorHand CursorHand { get; private set; }
     [SerializeField]
     PlayerController playerController;
-
-    public int ID { get; private set; }
-    //List<Collider2D> colList;
+    
 
     void Start()
     {
-        ID = id;
-        //colList = new List<Collider2D>();
+        CursorHand = cursorHand;
     }
 
     // Update is called once per frame
