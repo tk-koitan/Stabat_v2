@@ -47,9 +47,12 @@ public class CharaIcon : MonoBehaviour
         foreach (Collider2D col in collisions)
         {
             //ƒRƒCƒ“‚ÉG‚ê‚Ä‚é‚©‚Â’u‚©‚ê‚Ä‚È‚¢‚È‚ç
-            if (col.tag == "Chip" && col.GetComponent<Kawacoin>().CursorHand.Havecoin)
+            if (col.tag == "Chip")
             {
-                belowKawacoin = true;
+                if (col.GetComponent<Kawacoin>().CursorHand.Havecoin)
+                {
+                    belowKawacoin = true;
+                }
             }
         }
 

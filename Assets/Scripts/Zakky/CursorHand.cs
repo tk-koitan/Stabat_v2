@@ -13,6 +13,8 @@ public class CursorHand : MonoBehaviour
     Transform kawacoinTrans;
     [SerializeField]
     Kawacoin kawacoin;
+
+    //プロパティに代入する用
     [SerializeField]
     int id;
 
@@ -24,6 +26,15 @@ public class CursorHand : MonoBehaviour
     public bool Havecoin { get; private set; }
     public int ID { get; private set; }
 
+    public enum PlayerKind
+    {
+        None,
+        Human,
+        Computer
+    }
+
+    public PlayerKind playerKind;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -31,6 +42,8 @@ public class CursorHand : MonoBehaviour
         circleCollider2D = GetComponent<CircleCollider2D>();
         Havecoin = true;
         ID = id;
+
+        playerKind = PlayerKind.None;
     }
 
     // Update is called once per frame
@@ -39,6 +52,21 @@ public class CursorHand : MonoBehaviour
         PutChip();
 
         Move();
+
+        ChangePlayerKind();
+
+        BattleCheck();
+    }
+    void PutChip()
+    {
+        if ((KoitanInput.GetDown(ButtonCode.A, ID) && IsCollision()))
+        {
+            Havecoin = !Havecoin;
+        }
+        else if (KoitanInput.GetDown(ButtonCode.B, ID))
+        {
+            Havecoin = true;
+        }
     }
 
     void Move()
@@ -52,17 +80,25 @@ public class CursorHand : MonoBehaviour
         }
     }
 
-    void PutChip()
+    void ChangePlayerKind()
     {
-        if ((KoitanInput.GetDown(ButtonCode.A, ID) && IsCollision()))
+        if (KoitanInput.GetDown(ButtonCode.Y, ID))
         {
-            Havecoin = !Havecoin;
-        }
-        else if (KoitanInput.GetDown(ButtonCode.B, ID))
-        {
-            Havecoin = true;
+            playerKind++;
+            playerKind = (PlayerKind)((int)playerKind % ((int)PlayerKind.Computer + 1));
+            Koitan.BattleSetting.ControllPlayers[ID] = (int)playerKind;
         }
     }
+
+    void BattleCheck()
+    {
+        if (KoitanInput.GetDown(ButtonCode.X, ID) && kawacoin.IsDecided)
+        {
+            BattleManager.StartBattle();
+        }
+    }
+
+    //メンバで持ってるチップと同じIDのときtrue
     bool IsCollision()
     {
         Collider2D[] collisions = Physics2D.OverlapCircleAll(transform.position, circleCollider2D.radius);

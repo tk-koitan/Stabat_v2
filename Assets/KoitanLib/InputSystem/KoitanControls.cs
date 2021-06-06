@@ -407,6 +407,17 @@ public class @KoitanControls : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""a5c7b016-1cde-4a04-a0a6-85f60c25bdd0"",
+                    ""path"": ""<HID::JC-U3613M - DirectXInput Mode>/trigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Y"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""61d62e71-61ee-4b52-815c-e21bf2bec74e"",
                     ""path"": ""<Keyboard>/enter"",
                     ""interactions"": """",
@@ -787,6 +798,17 @@ public class @KoitanControls : IInputActionCollection, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""B"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a3e6fe51-87c9-4502-bd3b-131c665dbd0f"",
+                    ""path"": ""<HID::JC-U3613M - DirectXInput Mode>/button2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""X"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
