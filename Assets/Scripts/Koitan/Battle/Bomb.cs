@@ -84,9 +84,13 @@ namespace Koitan
                 {
                     return;
                 }
-                if (collision.tag == "Shop")
+                else if (collision.tag == "Shop")
                 {
                     collision.transform.parent.GetComponent<ShopController>().BrokenShop();
+                }
+                else if (collision.tag == "Bomb")
+                {
+                    collision.transform.parent.GetComponent<Bomb>().Explosion();
                 }
             }
         }
