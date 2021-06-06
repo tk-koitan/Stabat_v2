@@ -13,11 +13,13 @@ public class CharaIcon : MonoBehaviour
     //CursorHand cursorHand;
     public int CharaID { get; private set; }
     Vector3 iniScale;
+    BoxCollider2D boxCollider2D;
 
     void Start()
     {
         CharaID = charaID;
         iniScale = transform.localScale;
+        boxCollider2D = GetComponent<BoxCollider2D>();
     }
 
     // Update is called once per frame
@@ -36,9 +38,10 @@ public class CharaIcon : MonoBehaviour
         transform.DOScale(iniScale, 0.1f);
     }
 
+    //êGÇÍÇƒÇÈcolliderëSïîÇ‹ÇÌÇ∑
     void IsCollision()
     {
-        Collider2D[] collisions = Physics2D.OverlapBoxAll(transform.position, GetComponent<BoxCollider2D>().size, 0f);
+        Collider2D[] collisions = Physics2D.OverlapBoxAll(transform.position, boxCollider2D.size, 0f);
 
         bool belowKawacoin = false;
         foreach (Collider2D col in collisions)

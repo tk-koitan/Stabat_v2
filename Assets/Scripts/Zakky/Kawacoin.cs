@@ -17,11 +17,13 @@ public class Kawacoin : MonoBehaviour
     PlayerController playerController;
 
     Vector3 iniScale;
+    CircleCollider2D circleCollider2D;
 
     void Start()
     {
         CursorHand = cursorHand;
         iniScale = transform.localScale;
+        circleCollider2D = GetComponent<CircleCollider2D>();
     }
 
     // Update is called once per frame
@@ -34,30 +36,22 @@ public class Kawacoin : MonoBehaviour
 
     void IsCollision()
     {
-        Collider2D[] collisions = Physics2D.OverlapCircleAll(transform.position, GetComponent<CircleCollider2D>().radius);
+        Collider2D[] collisions = Physics2D.OverlapCircleAll(transform.position, circleCollider2D.radius);
 
         foreach (Collider2D col in collisions)
         {
-            //アイコンに触れてるなら
-            if (col.tag == "CharaIcon")
+            //アイコンに触れてるなら，さらにカーソルおいてるなら
+            if (col.tag == "CharaIcon" && !cursorHand.Havecoin)
             {
-                //さらにカーソルおいてるなら
-                if (!cursorHand.Havecoin)
-                {
-                    //キャラクター変える
-                    playerController.ChangeColor(col.GetComponent<CharaIcon>().CharaID, col.GetComponent<CharaIcon>().CharaID);
-                }
-                else
-                {
-
-                }
+                //キャラクター変える
+                playerController.ChangeColor(col.GetComponent<CharaIcon>().CharaID, col.GetComponent<CharaIcon>().CharaID);
             }
         }
     }
 
     void Scaler()
     {
-        if (cursorHand.Havecoin) transform.DOScale(1.3f, 0.1f);
+        if (CursorHand.Havecoin) transform.DOScale(1.3f, 0.1f);
         else transform.DOScale(1f, 0.1f);
     }
 }
