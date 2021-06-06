@@ -8,7 +8,7 @@ using Koitan;
 public class CursorHand : MonoBehaviour
 {
     [SerializeField]
-    float cursorVelocity = 1f;
+    float cursorVelocity = 100f;
     [SerializeField]
     Transform kawacoinTrans;
     [SerializeField]
@@ -18,6 +18,7 @@ public class CursorHand : MonoBehaviour
 
 
     Rigidbody2D rigidbody2D;
+    CircleCollider2D circleCollider2D;
     Kawacoin kawakoin;
 
     public bool Havecoin { get; private set; }
@@ -27,42 +28,53 @@ public class CursorHand : MonoBehaviour
     void Start()
     {
         rigidbody2D = GetComponent<Rigidbody2D>();
-        //kawakoin = Kawacoin.GetComponent<Kawacoin>();
-        Havecoin = false;
+        circleCollider2D = GetComponent<CircleCollider2D>();
+        Havecoin = true;
         ID = id;
     }
 
     // Update is called once per frame
     void Update()
     {
-        IsCollision();
+        PutChip();
 
         Move();
     }
 
     void Move()
     {
-        rigidbody2D.velocity += cursorVelocity * KoitanInput.GetStick(ID);
+        rigidbody2D.velocity += cursorVelocity * KoitanInput.GetStick(ID) * Time.deltaTime;
 
         if (Havecoin)
         {
-            Vector3 ofs = GetComponent<CircleCollider2D>().offset;
-            kawacoinTrans.DOMove(transform.position + ofs , 0.1f);
+            Vector3 ofs = circleCollider2D.offset;
+            kawacoinTrans.DOMove(transform.position + ofs , 0.05f);
         }
     }
 
-    void IsCollision()
+    void PutChip()
     {
-        Collider2D[] collisions = Physics2D.OverlapCircleAll(transform.position, GetComponent<CircleCollider2D>().radius);
+        if ((KoitanInput.GetDown(ButtonCode.A, ID) && IsCollision()))
+        {
+            Havecoin = !Havecoin;
+        }
+        else if (KoitanInput.GetDown(ButtonCode.B, ID))
+        {
+            Havecoin = true;
+        }
+    }
+    bool IsCollision()
+    {
+        Collider2D[] collisions = Physics2D.OverlapCircleAll(transform.position, circleCollider2D.radius);
 
         foreach (Collider2D col in collisions)
         {
-            if (KoitanInput.GetDown(ButtonCode.A, ID) &&
-            col.tag == "Chip" &&
-            col.GetComponent<Kawacoin>().CursorHand.ID == ID)
+            if (col.tag == "Chip" &&
+                col.GetComponent<Kawacoin>().CursorHand.ID == ID)
             {
-                Havecoin = !Havecoin;
+                return true;
             }
         }
+        return false;
     }
 }

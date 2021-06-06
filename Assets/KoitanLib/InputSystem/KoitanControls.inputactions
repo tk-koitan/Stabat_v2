@@ -765,6 +765,17 @@
                     "action": "Select",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8ea10d1f-37af-489c-bb22-4c2f1c1dc5bf",
+                    "path": "<HID::JC-U3613M - DirectXInput Mode>/button3",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "B",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         }
