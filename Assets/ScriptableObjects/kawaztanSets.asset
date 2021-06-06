@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fcd58f56335552d4aa1d81af5c651790, type: 3}
-  m_Name: CharaLibrarySetsData
+  m_Name: kawaztanSets
   m_EditorClassIdentifier: 
   librarys:
   - {fileID: 9033577611130392219, guid: 0e287f877b6f8ea46a7f586dc10ba94b, type: 3}

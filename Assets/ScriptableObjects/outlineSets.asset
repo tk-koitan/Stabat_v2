@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 81f40da981cdd7f4c8cd91dc2ed18449, type: 3}
-  m_Name: ColorSetsData
+  m_Name: outlineSets
   m_EditorClassIdentifier: 
   colors:
   - {r: 1, g: 0.5019608, b: 0, a: 1}

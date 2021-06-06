@@ -8,6 +8,8 @@ TagManager:
   - Money
   - Bomb
   - Shop
+  - Chip
+  - CharaIcon
   layers:
   - Default
   - TransparentFX
