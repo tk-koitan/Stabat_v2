@@ -53,13 +53,19 @@ namespace Koitan
             }
             if (isBroken)
             {
-
+                shopLostingTime += Time.deltaTime;
+                if (shopLostingTime >= landCreateIntervalTime)
+                {
+                    CreateLand();
+                    shopLostingTime = 0;
+                }
             }
         }
 
         public void CreateLand()
         {
-
+            isBroken = false;
+            landParent.gameObject.SetActive(true);
         }
 
         public void BuildShop(int teamIndex)
@@ -77,7 +83,6 @@ namespace Koitan
         {
             isBuild = false;
             isBroken = true;
-            landParent.gameObject.SetActive(true);
             shopParent.gameObject.SetActive(false);
             if (moneyInstance != null)
             {
