@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using KoitanLib;
+using Koitan;
 
 public class CursorHand : MonoBehaviour
 {
@@ -10,10 +11,12 @@ public class CursorHand : MonoBehaviour
     float cursorVelocity = 1f;
     [SerializeField]
     GameObject Kawacoin;
-
+    
 
     Rigidbody2D rigidbody2D;
     Kawacoin kawakoin;
+    //List<Collider2D> colList;
+
     public bool Havecoin { get; private set; }
 
     // Start is called before the first frame update
@@ -21,18 +24,22 @@ public class CursorHand : MonoBehaviour
     {
         rigidbody2D = GetComponent<Rigidbody2D>();
         kawakoin = Kawacoin.GetComponent<Kawacoin>();
+        //colList = new List<Collider2D>();
         Havecoin = false;
     }
 
     // Update is called once per frame
     void Update()
     {
+        IsCollision();
+
         Move();
     }
 
     void Move()
     {
         rigidbody2D.velocity += cursorVelocity * KoitanInput.GetStick(kawakoin.ID);
+
         if (Havecoin)
         {
             Vector3 ofs = GetComponent<CircleCollider2D>().offset;
@@ -40,12 +47,18 @@ public class CursorHand : MonoBehaviour
         }
     }
 
-    private void OnTriggerStay2D(Collider2D col)
+    void IsCollision()
     {
-        if (Input.GetButtonDown("Fire1") &&
-            col.GetComponent<Kawacoin>().ID == Kawacoin.GetComponent<Kawacoin>().ID)
+        Collider2D[] collisions = Physics2D.OverlapCircleAll(transform.position, GetComponent<CircleCollider2D>().radius);
+
+        foreach (Collider2D col in collisions)
         {
-            Havecoin = !Havecoin;
+            if (Input.GetButtonDown("Fire1") &&
+            col.tag == "Chip" &&
+            col.GetComponent<Kawacoin>().ID == Kawacoin.GetComponent<Kawacoin>().ID)
+            {
+                Havecoin = !Havecoin;
+            }
         }
     }
 }
