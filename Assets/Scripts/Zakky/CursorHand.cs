@@ -53,7 +53,7 @@ public class CursorHand : MonoBehaviour
 
         foreach (Collider2D col in collisions)
         {
-            if (Input.GetButtonDown("Fire1") &&
+            if (KoitanInput.GetDown(ButtonCode.A) &&
             col.tag == "Chip" &&
             col.GetComponent<Kawacoin>().ID == Kawacoin.GetComponent<Kawacoin>().ID)
             {
