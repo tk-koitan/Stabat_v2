@@ -10,8 +10,6 @@ public class Kawacoin : MonoBehaviour
     
     [SerializeField]
     CursorHand cursorHand;
-    //[SerializeField]
-    //CharaIcon charaIcon;
     public CursorHand CursorHand { get; private set; }
     [SerializeField]
     PlayerController playerController;
@@ -44,7 +42,10 @@ public class Kawacoin : MonoBehaviour
             if (col.tag == "CharaIcon" && !cursorHand.Havecoin)
             {
                 //キャラクター変える
-                playerController.ChangeColor(col.GetComponent<CharaIcon>().CharaID, col.GetComponent<CharaIcon>().CharaID);
+                int tmp = col.GetComponent<CharaIcon>().CharaID;
+
+                playerController.ChangeColor(tmp, tmp);
+                BattleSetting.charaColorIndexes[CursorHand.ID] = tmp;
             }
         }
     }
