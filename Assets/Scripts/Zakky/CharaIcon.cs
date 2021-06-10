@@ -49,7 +49,7 @@ public class CharaIcon : MonoBehaviour
             //ƒRƒCƒ“‚ÉG‚ê‚Ä‚é‚©‚Â’u‚©‚ê‚Ä‚È‚¢‚È‚ç
             if (col.tag == "Chip")
             {
-                if (col.GetComponent<Kawacoin>().CursorHand.Havecoin)
+                if (col.GetComponent<Kawacoin>().hadCoin)
                 {
                     belowKawacoin = true;
                 }

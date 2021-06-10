@@ -14,12 +14,30 @@ public class Kawacoin : MonoBehaviour
     PlayerController playerController;
     public CursorHand CursorHand { get; private set; }
     public bool IsDecided { get; private set; }
+    public bool hadCoin;
 
     Vector3 iniScale;
     CircleCollider2D circleCollider2D;
 
+    static List<Kawacoin> AllKawacoins = new List<Kawacoin>();
+    public static bool CanStartBattle()
+    {
+        foreach(Kawacoin k in AllKawacoins)
+        {
+            //None‚Ü‚½‚Ík‚ªDicided‚Å‚ ‚é
+            if (BattleSetting.ControllPlayers[k.CursorHand.ID] != (int)CursorHand.PlayerKind.None && !k.IsDecided) return false;
+        }
+        return true;
+    }
+
+    public static void DeleteKawacoinsList()
+    {
+        AllKawacoins.Clear();
+    }
+
     void Start()
     {
+        AllKawacoins.Add(this);
         CursorHand = cursorHand;
         iniScale = transform.localScale;
         circleCollider2D = GetComponent<CircleCollider2D>();
@@ -58,7 +76,7 @@ public class Kawacoin : MonoBehaviour
 
     void Scaler()
     {
-        if (CursorHand.Havecoin) transform.DOScale(1.3f, 0.1f);
+        if (hadCoin) transform.DOScale(1.3f, 0.1f);
         else transform.DOScale(1f, 0.1f);
     }
 }

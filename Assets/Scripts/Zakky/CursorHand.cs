@@ -9,10 +9,12 @@ public class CursorHand : MonoBehaviour
 {
     [SerializeField]
     float cursorVelocity = 100f;
-    [SerializeField]
-    Transform kawacoinTrans;
+    //[SerializeField]
+    //Transform kawacoinTrans;
     [SerializeField]
     Kawacoin kawacoin;
+    [SerializeField]
+    GameObject Kawaztan;
 
     //プロパティに代入する用
     [SerializeField]
@@ -21,7 +23,6 @@ public class CursorHand : MonoBehaviour
 
     Rigidbody2D rigidbody2D;
     CircleCollider2D circleCollider2D;
-    Kawacoin kawakoin;
 
     public bool Havecoin { get; private set; }
     public int ID { get; private set; }
@@ -49,6 +50,20 @@ public class CursorHand : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //適当
+        switch (playerKind) {
+            case PlayerKind.None:
+                Kawaztan.transform.rotation = Quaternion.Euler(0f, 0f, 180f);
+                break;
+            case PlayerKind.Human:
+                Kawaztan.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+                break;
+            case PlayerKind.Computer:
+                Kawaztan.transform.rotation = Quaternion.Euler(0f, 0f, 90f);
+                break;
+        }
+
+
         PutChip();
 
         Move();
@@ -59,10 +74,12 @@ public class CursorHand : MonoBehaviour
     }
     void PutChip()
     {
+        //A押してかつ範囲内にチップがあるとき
         if ((KoitanInput.GetDown(ButtonCode.A, ID) && IsCollision()))
         {
-            //A押してかつ範囲内にチップがあるときチップ持ち置き
+            //チップ持ち置き
             Havecoin = !Havecoin;
+            //カーソルの移動を止める
             rigidbody2D.velocity = Vector2.zero;
         }
         else if (KoitanInput.GetDown(ButtonCode.B, ID))
@@ -70,16 +87,20 @@ public class CursorHand : MonoBehaviour
             //B押したときチップ持つ
             Havecoin = true;
         }
+        kawacoin.hadCoin = Havecoin;
     }
 
     void Move()
     {
+        //移動入力で速度を加速
         rigidbody2D.velocity += cursorVelocity * KoitanInput.GetStick(ID) * Time.deltaTime;
 
+        //コイン持ってる判定のとき
         if (Havecoin)
         {
+            //指先にチップの持つ場所を移動する．
             Vector3 ofs = circleCollider2D.offset;
-            kawacoinTrans.DOMove(transform.position + ofs , 0.05f);
+            kawacoin.gameObject.transform.DOMove(transform.position + ofs , 0.05f);
         }
     }
 
@@ -95,8 +116,9 @@ public class CursorHand : MonoBehaviour
 
     void BattleCheck()
     {
-        if (KoitanInput.GetDown(ButtonCode.X, ID) && kawacoin.IsDecided)
+        if (KoitanInput.GetDown(ButtonCode.X, ID) && Kawacoin.CanStartBattle())
         {
+            Kawacoin.DeleteKawacoinsList();
             BattleManager.StartBattle();
         }
     }
@@ -109,8 +131,11 @@ public class CursorHand : MonoBehaviour
         foreach (Collider2D col in collisions)
         {
             if (col.tag == "Chip" &&
-                col.GetComponent<Kawacoin>().CursorHand.ID == ID)
+                (col.GetComponent<Kawacoin>().CursorHand.ID == ID /*またはコンピュータ*/ ||
+                (col.GetComponent<Kawacoin>().CursorHand.playerKind == PlayerKind.Computer && !col.GetComponent<Kawacoin>().CursorHand.Havecoin)))
             {
+                //そのkawacoinを取得する
+                kawacoin = col.GetComponent<Kawacoin>();
                 return true;
             }
         }

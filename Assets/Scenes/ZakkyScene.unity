@@ -776,6 +776,7 @@ MonoBehaviour:
   kawacoinTrans: {fileID: 425267738}
   kawacoin: {fileID: 425267740}
   id: 3
+  playerKind: 0
 --- !u!58 &760484389
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -789,7 +790,7 @@ CircleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.3, y: 1}
+  m_Offset: {x: -0.25, y: 1}
   serializedVersion: 2
   m_Radius: 1
 --- !u!50 &760484390
@@ -914,6 +915,7 @@ MonoBehaviour:
   kawacoinTrans: {fileID: 1120089474}
   kawacoin: {fileID: 1120089476}
   id: 1
+  playerKind: 0
 --- !u!58 &801679134
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -927,7 +929,7 @@ CircleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.3, y: 1}
+  m_Offset: {x: -0.25, y: 1}
   serializedVersion: 2
   m_Radius: 1
 --- !u!50 &801679135
@@ -1138,6 +1140,7 @@ MonoBehaviour:
   kawacoinTrans: {fileID: 2032044744}
   kawacoin: {fileID: 2032044745}
   id: 0
+  playerKind: 0
 --- !u!58 &907388173
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -1151,7 +1154,7 @@ CircleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.3, y: 1}
+  m_Offset: {x: -0.25, y: 1}
   serializedVersion: 2
   m_Radius: 1
 --- !u!1 &927537728
@@ -1571,6 +1574,7 @@ MonoBehaviour:
   kawacoinTrans: {fileID: 2028535222}
   kawacoin: {fileID: 2028535224}
   id: 2
+  playerKind: 0
 --- !u!58 &1016216009
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -1584,7 +1588,7 @@ CircleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.3, y: 1}
+  m_Offset: {x: -0.25, y: 1}
   serializedVersion: 2
   m_Radius: 1
 --- !u!50 &1016216010
