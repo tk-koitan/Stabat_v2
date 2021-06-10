@@ -41,7 +41,7 @@ public class CursorHand : MonoBehaviour
     {
         rigidbody2D = GetComponent<Rigidbody2D>();
         circleCollider2D = GetComponent<CircleCollider2D>();
-        Havecoin = true;
+        Havecoin = false;
         ID = id;
 
         playerKind = PlayerKind.None;
@@ -68,7 +68,12 @@ public class CursorHand : MonoBehaviour
 
         Move();
 
-        ChangePlayerKind();
+        if (KoitanInput.GetDown(ButtonCode.Y, ID))
+        {
+            CursorHand curtmp = IsKawaztanCollision();
+            if (curtmp != null) curtmp.ChangePlayerKind();
+            else ChangePlayerKind();
+        }
 
         BattleCheck();
     }
@@ -104,14 +109,11 @@ public class CursorHand : MonoBehaviour
         }
     }
 
-    void ChangePlayerKind()
+    public void ChangePlayerKind()
     {
-        if (KoitanInput.GetDown(ButtonCode.Y, ID))
-        {
-            playerKind++;
-            playerKind = (PlayerKind)((int)playerKind % ((int)PlayerKind.Computer + 1));
-            Koitan.BattleSetting.ControllPlayers[ID] = (int)playerKind;
-        }
+        playerKind++;
+        playerKind = (PlayerKind)((int)playerKind % ((int)PlayerKind.Computer + 1));
+        Koitan.BattleSetting.ControllPlayers[ID] = (int)playerKind;
     }
 
     void BattleCheck()
@@ -140,5 +142,19 @@ public class CursorHand : MonoBehaviour
             }
         }
         return false;
+    }
+
+    CursorHand IsKawaztanCollision()
+    {
+        Collider2D[] collisions = Physics2D.OverlapCircleAll(transform.position, circleCollider2D.radius);
+
+        foreach (Collider2D col in collisions)
+        {
+            if (col.tag == "Player")
+            {
+                return col.GetComponent<SelectedCharacter>().CursorHand;
+            }
+        }
+        return null;
     }
 }
