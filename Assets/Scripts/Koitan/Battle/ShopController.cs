@@ -99,7 +99,7 @@ namespace Koitan
             moneyInstance.SetTeamColor(teamIndex);
             moneyInstance.GetRigidbody().isKinematic = true;
             moneyInstance.SetSpeed(500);
-            moneyInstance.transform.SetParent(transform);
+            moneyInstance.transform.SetParent(moneyInitTf);
         }
     }
 }
