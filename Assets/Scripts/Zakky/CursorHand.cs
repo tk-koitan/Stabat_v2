@@ -61,10 +61,13 @@ public class CursorHand : MonoBehaviour
     {
         if ((KoitanInput.GetDown(ButtonCode.A, ID) && IsCollision()))
         {
+            //A押してかつ範囲内にチップがあるときチップ持ち置き
             Havecoin = !Havecoin;
+            rigidbody2D.velocity = Vector2.zero;
         }
         else if (KoitanInput.GetDown(ButtonCode.B, ID))
         {
+            //B押したときチップ持つ
             Havecoin = true;
         }
     }
