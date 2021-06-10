@@ -14,6 +14,17 @@ namespace Koitan
         CharaLibrarySets charaColorSets;
         [SerializeField]
         ColorSets outlineSets;
+        float flashTime = 0f;
+
+        private void Update()
+        {
+            if (flashTime > 0f)
+            {
+                flashTime -= Time.deltaTime;
+                int flash = (int)(flashTime / 0.1f) % 2;
+                mesh.SetActive(flash != 1);
+            }
+        }
 
         public void ChangeColor(int charaColorIndex, int outlineColorIndex)
         {
@@ -23,6 +34,11 @@ namespace Koitan
             {
                 sr.color = outlineSets.colors[outlineColorIndex];
             }
+        }
+
+        public void SetFlashTime(float time)
+        {
+            flashTime = time;
         }
     }
 }

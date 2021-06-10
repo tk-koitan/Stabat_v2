@@ -24,7 +24,14 @@ namespace Koitan
         Bomb grabedBomb = null;
         [SerializeField]
         Transform handTf;
+        /// <summary>
+        /// d’¼ŠÔ
+        /// </summary>
         float inoperableTime = 0f;
+        /// <summary>
+        /// –³“GŠÔ
+        /// </summary>
+        float invincibleTime = 0f;
         // Start is called before the first frame update
         void Awake()
         {
@@ -46,6 +53,14 @@ namespace Koitan
 
             animator.SetBool("Fall", motor.IsFalling());
             animator.SetBool("Ground", motor.IsGrounded());
+            animator.SetBool("Damage", IsInoperable() && IsInvincible());
+
+            //–³“GŠÔ
+            if (invincibleTime > 0f)
+            {
+                invincibleTime -= Time.deltaTime;
+
+            }
 
             //‘€ì•s”\
             if (inoperableTime > 0f)
@@ -105,9 +120,36 @@ namespace Koitan
             }
         }
 
+        /// <summary>
+        /// ‘€ì•s”\ŠÔ
+        /// </summary>
+        /// <param name="time"></param>
         public void SetInoperableTime(float time)
         {
             inoperableTime = time;
+        }
+
+        /// <summary>
+        /// –³“GŠÔ
+        /// </summary>
+        /// <param name="time"></param>
+        public void SetInvincibleTime(float time)
+        {
+            if (time > invincibleTime)
+            {
+                invincibleTime = time;
+                charaColorChanger.SetFlashTime(time);
+            }
+        }
+
+        public bool IsInoperable()
+        {
+            return inoperableTime > 0f;
+        }
+
+        public bool IsInvincible()
+        {
+            return invincibleTime > 0f;
         }
 
         public void ThrowBomb()
@@ -129,6 +171,18 @@ namespace Koitan
         public void AddPowerVec(Vector2 vec)
         {
             motor.velocity = vec;
+        }
+
+        public void SetDamage(Vector2 vec, float time)
+        {
+            // –³“G‚Å‚ ‚ê‚Î–³‹
+            if (IsInvincible()) return;
+            AddPowerVec(vec);
+            SetInoperableTime(time);
+            //‚Æ‚è‚ ‚¦‚¸“ñ”{‚Ì–³“GŠÔ
+            SetInvincibleTime(time * 2f);
+            //‚Æ‚è‚ ‚¦‚¸ƒAƒjƒ[ƒVƒ‡ƒ“
+            animator.Play("Damage");
         }
 
         private void OnTriggerStay2D(Collider2D collision)
