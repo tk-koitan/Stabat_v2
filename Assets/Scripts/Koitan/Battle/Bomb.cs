@@ -83,9 +83,12 @@ namespace Koitan
                 if (collision.tag == "Player")
                 {
                     PlayerController playerController = collision.GetComponent<PlayerController>();
-                    Vector2 unitVec = (playerController.transform.position - transform.position).normalized;
-                    playerController.AddPowerVec(unitVec * 50f);
+                    //Vector2 unitVec = (playerController.transform.position - transform.position).normalized;
+                    /*
+                    playerController.AddPowerVec(new Vector2(Mathf.Sign(playerController.transform.position.x - transform.position.x), 1) * 50f);
                     playerController.SetInoperableTime(1f);
+                    */
+                    playerController.SetDamage(new Vector2(Mathf.Sign(playerController.transform.position.x - transform.position.x), 1) * 35f, 1f);
                     return;
                 }
                 else if (collision.tag == "Shop")
