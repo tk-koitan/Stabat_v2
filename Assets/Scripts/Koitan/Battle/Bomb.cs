@@ -80,8 +80,12 @@ namespace Koitan
         {
             if (isFired)
             {
-                if (collision.tag == "Player" && collision.GetComponent<PlayerController>().playerIndex == playerIndex)
+                if (collision.tag == "Player")
                 {
+                    PlayerController playerController = collision.GetComponent<PlayerController>();
+                    Vector2 unitVec = (playerController.transform.position - transform.position).normalized;
+                    playerController.AddPowerVec(unitVec * 50f);
+                    playerController.SetInoperableTime(1f);
                     return;
                 }
                 else if (collision.tag == "Shop")
