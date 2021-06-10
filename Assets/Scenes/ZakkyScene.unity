@@ -123,6 +123,11 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &36840 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 338428582370640903, guid: 9cc35a0d3907be845bd1ad168cef5d36, type: 3}
+  m_PrefabInstance: {fileID: 99518889}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &55258079
 GameObject:
   m_ObjectHideFlags: 0
@@ -478,7 +483,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 338428582370640896, guid: 9cc35a0d3907be845bd1ad168cef5d36, type: 3}
   m_PrefabInstance: {fileID: 1221572465}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 2048993971}
   m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 96b19c1ff3402374a9019bdc5efb4e03, type: 3}
@@ -488,6 +493,11 @@ MonoBehaviour:
 Transform:
   m_CorrespondingSourceObject: {fileID: 338428582370640901, guid: 9cc35a0d3907be845bd1ad168cef5d36, type: 3}
   m_PrefabInstance: {fileID: 1221572465}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &313163952 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 338428582370640903, guid: 9cc35a0d3907be845bd1ad168cef5d36, type: 3}
+  m_PrefabInstance: {fileID: 2008374339}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &331213163 stripped
 GameObject:
@@ -629,6 +639,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cursorHand: {fileID: 760484388}
   playerController: {fileID: 267694483}
+  hadCoin: 0
 --- !u!212 &425267741
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -685,7 +696,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 338428582370640896, guid: 9cc35a0d3907be845bd1ad168cef5d36, type: 3}
   m_PrefabInstance: {fileID: 99518889}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 36840}
   m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 96b19c1ff3402374a9019bdc5efb4e03, type: 3}
@@ -773,8 +784,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cursorVelocity: 100
-  kawacoinTrans: {fileID: 425267738}
   kawacoin: {fileID: 425267740}
+  Kawaztan: {fileID: 2048993971}
   id: 3
   playerKind: 0
 --- !u!58 &760484389
@@ -912,8 +923,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cursorVelocity: 100
-  kawacoinTrans: {fileID: 1120089474}
   kawacoin: {fileID: 1120089476}
+  Kawaztan: {fileID: 2124833809}
   id: 1
   playerKind: 0
 --- !u!58 &801679134
@@ -1137,8 +1148,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cursorVelocity: 100
-  kawacoinTrans: {fileID: 2032044744}
   kawacoin: {fileID: 2032044745}
+  Kawaztan: {fileID: 313163952}
   id: 0
   playerKind: 0
 --- !u!58 &907388173
@@ -1571,8 +1582,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cursorVelocity: 100
-  kawacoinTrans: {fileID: 2028535222}
   kawacoin: {fileID: 2028535224}
+  Kawaztan: {fileID: 36840}
   id: 2
   playerKind: 0
 --- !u!58 &1016216009
@@ -1715,7 +1726,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 338428582370640896, guid: 9cc35a0d3907be845bd1ad168cef5d36, type: 3}
   m_PrefabInstance: {fileID: 942897500}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 2124833809}
   m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 96b19c1ff3402374a9019bdc5efb4e03, type: 3}
@@ -1822,6 +1833,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cursorHand: {fileID: 801679133}
   playerController: {fileID: 1094834231}
+  hadCoin: 0
 --- !u!212 &1120089477
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -2313,7 +2325,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 338428582370640896, guid: 9cc35a0d3907be845bd1ad168cef5d36, type: 3}
   m_PrefabInstance: {fileID: 2008374339}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 313163952}
   m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 96b19c1ff3402374a9019bdc5efb4e03, type: 3}
@@ -2973,6 +2985,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player0
       objectReference: {fileID: 0}
+    - target: {fileID: 338428582433523635, guid: 9cc35a0d3907be845bd1ad168cef5d36, type: 3}
+      propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 338428582487947528, guid: 9cc35a0d3907be845bd1ad168cef5d36, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -3094,6 +3110,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cursorHand: {fileID: 1016216008}
   playerController: {fileID: 438558416}
+  hadCoin: 0
 --- !u!212 &2028535225
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -3243,6 +3260,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cursorHand: {fileID: 907388172}
   playerController: {fileID: 1552917034}
+  hadCoin: 0
 --- !u!58 &2032044746
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -3259,3 +3277,13 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.5
+--- !u!1 &2048993971 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 338428582370640903, guid: 9cc35a0d3907be845bd1ad168cef5d36, type: 3}
+  m_PrefabInstance: {fileID: 1221572465}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &2124833809 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 338428582370640903, guid: 9cc35a0d3907be845bd1ad168cef5d36, type: 3}
+  m_PrefabInstance: {fileID: 942897500}
+  m_PrefabAsset: {fileID: 0}
