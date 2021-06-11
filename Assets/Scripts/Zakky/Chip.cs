@@ -4,7 +4,7 @@ using UnityEngine;
 using DG.Tweening;
 using Koitan;
 
-public class Kawacoin : MonoBehaviour
+public class Chip : MonoBehaviour
 {
     // Start is called before the first frame update
     
@@ -19,25 +19,25 @@ public class Kawacoin : MonoBehaviour
     Vector3 iniScale;
     CircleCollider2D circleCollider2D;
 
-    static List<Kawacoin> AllKawacoins = new List<Kawacoin>();
+    static List<Chip> AllChips = new List<Chip>();
     public static bool CanStartBattle()
     {
-        foreach(Kawacoin k in AllKawacoins)
+        foreach(Chip c in AllChips)
         {
             //None‚Ü‚½‚Ík‚ªDicided‚Å‚ ‚é
-            if (BattleSetting.ControllPlayers[k.CursorHand.ID] != (int)CursorHand.PlayerKind.None && !k.IsDecided) return false;
+            if (BattleSetting.ControllPlayers[c.CursorHand.ID] != (int)CursorHand.PlayerKind.None && !c.IsDecided) return false;
         }
         return true;
     }
 
-    public static void DeleteKawacoinsList()
+    public static void DeleteChipsList()
     {
-        AllKawacoins.Clear();
+        AllChips.Clear();
     }
 
     void Start()
     {
-        AllKawacoins.Add(this);
+        AllChips.Add(this);
         CursorHand = cursorHand;
         iniScale = transform.localScale;
         circleCollider2D = GetComponent<CircleCollider2D>();

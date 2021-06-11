@@ -9,8 +9,6 @@ public class CharaIcon : MonoBehaviour
     // Start is called before the first frame update
     [SerializeField]
     int charaID;
-    //[SerializeField]
-    //CursorHand cursorHand;
     public int CharaID { get; private set; }
     Vector3 iniScale;
     BoxCollider2D boxCollider2D;
@@ -43,20 +41,20 @@ public class CharaIcon : MonoBehaviour
     {
         Collider2D[] collisions = Physics2D.OverlapBoxAll(transform.position, boxCollider2D.size, 0f);
 
-        bool belowKawacoin = false;
+        bool belowChip = false;
         foreach (Collider2D col in collisions)
         {
             //ÉRÉCÉìÇ…êGÇÍÇƒÇÈÇ©Ç¬íuÇ©ÇÍÇƒÇ»Ç¢Ç»ÇÁ
             if (col.tag == "Chip")
             {
-                if (col.GetComponent<Kawacoin>().hadCoin)
+                if (col.GetComponent<Chip>().hadCoin)
                 {
-                    belowKawacoin = true;
+                    belowChip = true;
                 }
             }
         }
 
-        if (belowKawacoin)
+        if (belowChip)
         {
             Puruun();
         }

@@ -30,6 +30,7 @@ DONE
 2Pも作る
 スクリプトアタッチ
 指先の位置調整
-他の人コンピュータにす
+他の人コンピュータにする
+スクリプト上のkawacoinをチップに直した
 
 https://hackmd.io/mcGnhwatRX2-8zTZ--LUfw

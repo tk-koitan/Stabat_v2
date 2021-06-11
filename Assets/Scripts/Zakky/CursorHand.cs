@@ -12,7 +12,7 @@ public class CursorHand : MonoBehaviour
     //[SerializeField]
     //Transform kawacoinTrans;
     [SerializeField]
-    Kawacoin kawacoin;
+    Chip chip;
     [SerializeField]
     GameObject Kawaztan;
 
@@ -92,7 +92,7 @@ public class CursorHand : MonoBehaviour
             //B押したときチップ持つ
             Havecoin = true;
         }
-        kawacoin.hadCoin = Havecoin;
+        chip.hadCoin = Havecoin;
     }
 
     void Move()
@@ -105,7 +105,7 @@ public class CursorHand : MonoBehaviour
         {
             //指先にチップの持つ場所を移動する．
             Vector3 ofs = circleCollider2D.offset;
-            kawacoin.gameObject.transform.DOMove(transform.position + ofs , 0.05f);
+            chip.gameObject.transform.DOMove(transform.position + ofs , 0.05f);
         }
     }
 
@@ -118,9 +118,9 @@ public class CursorHand : MonoBehaviour
 
     void BattleCheck()
     {
-        if (KoitanInput.GetDown(ButtonCode.X, ID) && Kawacoin.CanStartBattle())
+        if (KoitanInput.GetDown(ButtonCode.X, ID) && Chip.CanStartBattle())
         {
-            Kawacoin.DeleteKawacoinsList();
+            Chip.DeleteChipsList();
             BattleManager.StartBattle();
         }
     }
@@ -133,11 +133,11 @@ public class CursorHand : MonoBehaviour
         foreach (Collider2D col in collisions)
         {
             if (col.tag == "Chip" &&
-                (col.GetComponent<Kawacoin>().CursorHand.ID == ID /*またはコンピュータ*/ ||
-                (col.GetComponent<Kawacoin>().CursorHand.playerKind == PlayerKind.Computer && !col.GetComponent<Kawacoin>().CursorHand.Havecoin)))
+                (col.GetComponent<Chip>().CursorHand.ID == ID /*またはコンピュータ*/ ||
+                (col.GetComponent<Chip>().CursorHand.playerKind == PlayerKind.Computer && !col.GetComponent<Chip>().CursorHand.Havecoin)))
             {
-                //そのkawacoinを取得する
-                kawacoin = col.GetComponent<Kawacoin>();
+                //そのchipを取得する
+                chip = col.GetComponent<Chip>();
                 return true;
             }
         }
