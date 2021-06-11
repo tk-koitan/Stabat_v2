@@ -48,6 +48,8 @@ public class Chip : MonoBehaviour
     {
         IsCollision();
 
+        circleCollider2D.isTrigger = hadCoin;
+
         Scaler();
     }
 

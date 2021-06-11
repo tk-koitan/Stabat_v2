@@ -614,6 +614,7 @@ GameObject:
   - component: {fileID: 425267741}
   - component: {fileID: 425267740}
   - component: {fileID: 425267739}
+  - component: {fileID: 425267742}
   m_Layer: 0
   m_Name: KawaCoin
   m_TagString: Chip
@@ -717,6 +718,27 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!50 &425267742
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 425267737}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1000000
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!114 &438558416 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 338428582370640896, guid: 9cc35a0d3907be845bd1ad168cef5d36, type: 3}
@@ -810,7 +832,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cursorVelocity: 100
-  kawacoin: {fileID: 425267740}
+  chip: {fileID: 425267740}
   Kawaztan: {fileID: 2048993971}
   id: 3
   playerKind: 0
@@ -949,7 +971,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cursorVelocity: 100
-  kawacoin: {fileID: 1120089476}
+  chip: {fileID: 1120089476}
   Kawaztan: {fileID: 2124833809}
   id: 1
   playerKind: 0
@@ -1174,7 +1196,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cursorVelocity: 100
-  kawacoin: {fileID: 2032044745}
+  chip: {fileID: 2032044745}
   Kawaztan: {fileID: 313163952}
   id: 0
   playerKind: 0
@@ -1608,7 +1630,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cursorVelocity: 100
-  kawacoin: {fileID: 2028535224}
+  chip: {fileID: 2028535224}
   Kawaztan: {fileID: 36840}
   id: 2
   playerKind: 0
@@ -1808,6 +1830,7 @@ GameObject:
   - component: {fileID: 1120089477}
   - component: {fileID: 1120089476}
   - component: {fileID: 1120089475}
+  - component: {fileID: 1120089478}
   m_Layer: 0
   m_Name: KawaCoin
   m_TagString: Chip
@@ -1911,6 +1934,27 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!50 &1120089478
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1120089473}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1000000
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &1145295967 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2267564005437574659, guid: 4005b30a4ca800346b84eda88ed62b3b, type: 3}
@@ -3085,6 +3129,7 @@ GameObject:
   - component: {fileID: 2028535225}
   - component: {fileID: 2028535224}
   - component: {fileID: 2028535223}
+  - component: {fileID: 2028535226}
   m_Layer: 0
   m_Name: KawaCoin
   m_TagString: Chip
@@ -3188,6 +3233,27 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!50 &2028535226
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2028535221}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1000000
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &2032044742
 GameObject:
   m_ObjectHideFlags: 0
@@ -3200,6 +3266,7 @@ GameObject:
   - component: {fileID: 2032044743}
   - component: {fileID: 2032044745}
   - component: {fileID: 2032044746}
+  - component: {fileID: 2032044747}
   m_Layer: 0
   m_Name: KawaCoin
   m_TagString: Chip
@@ -3303,6 +3370,27 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.5
+--- !u!50 &2032044747
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2032044742}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1000000
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &2048993971 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 338428582370640903, guid: 9cc35a0d3907be845bd1ad168cef5d36, type: 3}

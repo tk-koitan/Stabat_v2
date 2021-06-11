@@ -79,9 +79,11 @@ public class CursorHand : MonoBehaviour
     }
     void PutChip()
     {
+        Chip chiptmp = IsChipCollision();
         //A押してかつ範囲内にチップがあるとき
-        if ((KoitanInput.GetDown(ButtonCode.A, ID) && IsCollision()))
+        if ((KoitanInput.GetDown(ButtonCode.A, ID) && chiptmp != null))
         {
+            chip = chiptmp;
             //チップ持ち置き
             Havecoin = !Havecoin;
             //カーソルの移動を止める
@@ -126,22 +128,31 @@ public class CursorHand : MonoBehaviour
     }
 
     //メンバで持ってるチップと同じIDのときtrue
-    bool IsCollision()
+    Chip IsChipCollision()
     {
         Collider2D[] collisions = Physics2D.OverlapCircleAll(transform.position, circleCollider2D.radius);
+        Chip chiptmp = null;
+        float distance = (float)1e9;
 
         foreach (Collider2D col in collisions)
         {
+            Chip nowchip = col.GetComponent<Chip>();
+            //自分の持ってるチップかコンピュータのチップのとき
             if (col.tag == "Chip" &&
-                (col.GetComponent<Chip>().CursorHand.ID == ID /*またはコンピュータ*/ ||
-                (col.GetComponent<Chip>().CursorHand.playerKind == PlayerKind.Computer && !col.GetComponent<Chip>().CursorHand.Havecoin)))
+                (nowchip.CursorHand.ID == ID ||
+                (nowchip.CursorHand.playerKind == PlayerKind.Computer && !nowchip.CursorHand.Havecoin)))
             {
+                Vector3 off = circleCollider2D.offset;
+                float dis = Vector2.Distance(transform.position + off, col.transform.position);
                 //そのchipを取得する
-                chip = col.GetComponent<Chip>();
-                return true;
+                if (distance > dis && !(chip.hadCoin && !nowchip.hadCoin))
+                {
+                    distance = dis;
+                    chiptmp = nowchip;
+                }
             }
         }
-        return false;
+        return chiptmp;
     }
 
     CursorHand IsKawaztanCollision()
