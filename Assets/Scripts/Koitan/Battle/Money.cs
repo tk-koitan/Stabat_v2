@@ -42,6 +42,7 @@ namespace Koitan
 
         public float GetMoney()
         {
+            BattleManager.DestroyMoney(this);
             Destroy(gameObject);
             return moneyValue;
         }

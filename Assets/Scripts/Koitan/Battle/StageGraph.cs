@@ -223,8 +223,9 @@ namespace Koitan
         /// <param name="pos"></param>
         /// <param name="isHere">現在地のノードを結果に含めるか</param>
         /// <param name="isFrom">isFrom ? 近辺のノード -> 現在地 : 現在地 -> 近辺のノード</param>
+        /// <param name="canJump">ジャンプできるか</param>
         /// <returns></returns>
-        public List<StageNode> GetNearNodes(Vector3 pos, bool isHere, bool isFrom)
+        public List<StageNode> GetNearNodes(Vector3 pos, bool isHere, bool isFrom, bool canJump)
         {
             List<StageNode> nearNodes = new List<StageNode>();
             //調べる範囲を計算する
@@ -243,6 +244,8 @@ namespace Koitan
                     StageNode endNode = GetNode(x, y);
                     //無いなら抜ける
                     if (endNode == null) continue;
+                    // ジャンプできなくて上にあるなら抜ける、少し余裕をもたせる
+                    if (!canJump && endNode.transform.position.y - pos.y > 0.1f) continue;
                     //レイを飛ばして進入可能か調べる
                     //なぜかできない
                     Vector3 sPos, ePos;
@@ -283,12 +286,12 @@ namespace Koitan
         /// 近辺の最も近いノードを返します
         /// </summary>
         /// <param name="pos"></param>
-        /// <param name="isFrom">isFrom ? 近辺のノード -> 現在地 : 現在地 -> 近辺のノード</param>
+        /// <param name="isFrom">isFrom ? 近辺のノード -> 現在地 : 現在地 -> 近辺のノード</param>     
         /// <returns></returns>
         public StageNode GetNearestNode(Vector3 pos, bool isFrom)
         {
             StageNode resNode = null;
-            foreach (StageNode node in GetNearNodes(pos, true, isFrom))
+            foreach (StageNode node in GetNearNodes(pos, true, isFrom, true))
             {
                 if (resNode == null)
                 {
@@ -403,6 +406,8 @@ namespace Koitan
                             nodeObj.transform.SetParent(transform);
                             nodeObj.name = $"{collider.gameObject.name}Node{nodeNumber:D2}";
                             StageNode entryNode = nodeObj.GetComponent<StageNode>();
+                            // 内側でジャンプできる扱いにする
+                            if (i > 0 && i < splitNum) entryNode.canJump = true;
                             StageNode firstNode = GetNode(nodeObj.transform.position);
                             if (firstNode == null)
                             {
@@ -428,6 +433,50 @@ namespace Koitan
                                 DestroyImmediate(nodeObj);
                             }
                         }
+                    }
+                }
+            }
+            // ショップ検索
+            foreach (ShopController shop in FindObjectsOfType(typeof(ShopController)))
+            {
+                // シーン上に存在するオブジェクトならば処理.
+                if (shop.gameObject.activeInHierarchy)
+                {
+                    RaycastHit2D hit;
+                    Vector3 rayOrigin = shop.transform.position + Vector3.up * 1f;
+                    hit = Physics2D.Raycast(rayOrigin, Vector2.down, 0.9f, layerMask);
+                    //ぶつかったら抜ける
+                    if (hit) continue;
+                    GameObject nodeObj = Instantiate(nodePrefab);
+                    nodeObj.transform.position = rayOrigin;
+                    nodeObj.transform.SetParent(transform);
+                    nodeObj.name = $"{shop.gameObject.name}Node{nodeNumber:D2}";
+                    StageNode entryNode = nodeObj.GetComponent<StageNode>();
+                    // ジャンプできる扱いにする
+                    entryNode.canJump = true;
+                    StageNode firstNode = GetNode(nodeObj.transform.position);
+                    if (firstNode == null)
+                    {
+                        //範囲外か調べる
+                        if (SetNode(nodeObj.transform.position, entryNode))
+                        {
+                            //通し番号
+                            entryNode.nodeNumber = nodeNumber;
+                            nodeNumber++;
+                            nodeList.Add(entryNode);
+                            Undo.RegisterCreatedObjectUndo(nodeObj, "Create Node");
+                        }
+                        else
+                        {
+                            DestroyImmediate(nodeObj);
+                        }
+                    }
+                    else
+                    {
+                        //先客がいた場合座標の平均をとる
+                        Vector3 midPoint = (firstNode.transform.position + entryNode.transform.position) / 2f;
+                        firstNode.transform.position = midPoint;
+                        DestroyImmediate(nodeObj);
                     }
                 }
             }
@@ -543,7 +592,7 @@ namespace Koitan
 
             foreach (StageNode startNode in nodeList)
             {
-                startNode.endPoints = GetNearNodes(startNode.transform.position, false, false);
+                startNode.endPoints = GetNearNodes(startNode.transform.position, false, false, startNode.canJump);
             }
 
             EditorUtility.SetDirty(this);

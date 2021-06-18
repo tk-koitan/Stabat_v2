@@ -15,6 +15,8 @@ namespace Koitan
         public static int[] Moneys => instance.moneys;
         [SerializeField]
         CinemachineTargetGroup targetGroup;
+        [SerializeField]
+        Money moneyPrefab;
         //Ç±ÇÃèëÇ´ï˚í¥ï÷óò
         public static CinemachineTargetGroup TargetGroup => instance.targetGroup;
         public static BattleManager instance { private set; get; }
@@ -39,6 +41,7 @@ namespace Koitan
         [SerializeField]
         ShopController[] shops;
         public static ShopController[] Shops => instance.shops;
+        public static List<Money> moneyInstances = new List<Money>();
         // Start is called before the first frame update
         void Awake()
         {
@@ -87,6 +90,7 @@ namespace Koitan
             {
                 KoitanDebug.DisplayBox($"{moneys[i]}", players[i]);
             }
+            KoitanDebug.Display($"MoneyInstances.Count = {moneyInstances.Count}");
             itemCreateTime += Time.deltaTime;
             if (itemCreateTime > intervalTime)
             {
@@ -111,6 +115,27 @@ namespace Koitan
                     break;
                 }
             }
+        }
+
+        /// <summary>
+        /// Ç®ã‡Çê∂ê¨Ç∑ÇÈ
+        /// </summary>
+        /// <param name="pos"></param>
+        /// <returns></returns>
+        public static Money CreateMoney(Vector3 pos)
+        {
+            Money tmp = Instantiate(instance.moneyPrefab, pos, Quaternion.identity);
+            moneyInstances.Add(tmp);
+            return tmp;
+        }
+
+        /// <summary>
+        /// Ç®ã‡Çîjä¸Ç∑ÇÈ
+        /// </summary>
+        /// <param name="money"></param>
+        public static void DestroyMoney(Money money)
+        {
+            moneyInstances.Remove(money);
         }
 
         public static void StartBattle()

@@ -95,7 +95,8 @@ namespace Koitan
 
         public void CreateMoney()
         {
-            moneyInstance = Instantiate(moneyPrefab, moneyInitTf.position, Quaternion.identity);
+            moneyInstance = BattleManager.CreateMoney(moneyInitTf.position);
+            //moneyInstance = Instantiate(moneyPrefab, moneyInitTf.position, Quaternion.identity);
             moneyInstance.SetTeamColor(teamIndex);
             moneyInstance.GetRigidbody().isKinematic = true;
             moneyInstance.SetSpeed(500);

@@ -11,6 +11,7 @@ namespace Koitan
         public List<StageNode> endPoints;
         public float[] endDistances;
         public int nodeNumber;
+        public bool canJump;
         // Start is called before the first frame update
         void Start()
         {
@@ -34,7 +35,7 @@ namespace Koitan
 
         private void OnDrawGizmos()
         {
-            Gizmos.color = Color.gray;
+            Gizmos.color = canJump ? Color.gray : Color.blue;
             Gizmos.DrawSphere(transform.position, radius);
             Gizmos.color = Color.red;
             foreach (StageNode endPoint in endPoints)

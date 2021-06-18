@@ -48,12 +48,18 @@ namespace Koitan
                 retryTime = 0;
             }
 
-            if (path == null) return;
+            if (path == null)
+            {
+                SearchPath();
+                return;
+            }
             if (path.Count > 0)
             {
                 if (retryTime >= retryTimeMax)
                 {
-                    path = StageGraph.instance.GetPath(myPos, path[path.Count - 1]);
+                    //path = StageGraph.instance.GetPath(myPos, path[path.Count - 1]);
+                    SearchPath();
+                    if (path == null) return;
                     otherPos = path[0];
                     retryTime = 0;
                 }
@@ -98,8 +104,11 @@ namespace Koitan
 
         public void SearchPath()
         {
+            // まず空いている売地を探す
             Vector3 shopPos = myPos;
-            float shopDist = 1000000;
+            float shopDist;
+            shopDist = 1000000;
+            //Debug.Log("uritisearch");
             foreach (ShopController shop in BattleManager.Shops)
             {
                 if (!shop.isBuild)
@@ -113,8 +122,39 @@ namespace Koitan
                     }
                 }
             }
-            path = StageGraph.instance.GetPath(myPos, shopPos);
-            retryTime = 0;
+            // 空いている売地を見つけた
+            if (shopPos != myPos)
+            {
+                path = StageGraph.instance.GetPath(myPos, shopPos);
+                retryTime = 0;
+                // 道があるので抜ける
+                if (path != null) return;
+            }
+            //Debug.Log("okanesearch");
+            // なかったらお金を取る
+            Vector3 moneyPos = myPos;
+            float moneyDist;
+            moneyDist = 1000000;
+            int teamIndex = BattleManager.Players[controllerIndex].teamIndex;
+            foreach (Money money in BattleManager.moneyInstances)
+            {
+                // チームカラー不一致により入手不可
+                if (!money.IsGetable(teamIndex)) continue;
+                Vector3 tmpMoneyPos = money.transform.position;
+                float dist = Vector3.Distance(myPos, tmpMoneyPos);
+                if (dist < moneyDist)
+                {
+                    moneyDist = dist;
+                    moneyPos = tmpMoneyPos;
+                }
+            }
+            // お金を見つけた
+            if (moneyPos != myPos)
+            {
+                path = StageGraph.instance.GetPath(myPos, moneyPos);
+                retryTime = 0;
+                return;
+            }
         }
 
         private void OnDrawGizmos()
@@ -126,7 +166,7 @@ namespace Koitan
                 {
                     //GizmosExtensions2D.DrawRectArrow2D(myPos, path[0], 0.25f);
                     GizmosExtensions2D.DrawArrow2D(myPos, path[0], 0.25f);
-                    Gizmos.DrawWireSphere(path[path.Count - 1], 0.5f);
+                    Gizmos.DrawWireSphere(path[path.Count - 1], 1f);
                 }
                 for (int i = 0; i < path.Count - 1; i++)
                 {
