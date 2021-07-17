@@ -4,6 +4,8 @@ using UnityEngine;
 using KoitanLib;
 using Cinemachine;
 using UnityEngine.SceneManagement;
+using TMPro;
+using UnityEngine.UI;
 
 namespace Koitan
 {
@@ -40,6 +42,19 @@ namespace Koitan
         float itemCreateTime;
         [SerializeField]
         ShopController[] shops;
+        [SerializeField]
+        TextMeshProUGUI[] moneyTexts;
+        [SerializeField]
+        GameObject[] moneyUis;
+        [SerializeField]
+        TextMeshProUGUI timerText;
+        [SerializeField]
+        float limitSeconds;
+        [SerializeField]
+        GameObject owariText;
+        [SerializeField]
+        GameObject hagimariText;
+        BattleProgress battleProgress = BattleProgress.BeforeBattle;
         public static ShopController[] Shops => instance.shops;
         public static List<Money> moneyInstances = new List<Money>();
         // Start is called before the first frame update
@@ -60,8 +75,9 @@ namespace Koitan
                     players.Add(player);
                     targetGroup.AddMember(player.transform, 1f, 3f);
 
-                    moneys[i] = 1000;
+                    moneys[i] = 0;
                 }
+
                 /*
                 for (int i = 0; i < KoitanInput.GetControllerNum(); i++)
                 {
@@ -78,6 +94,24 @@ namespace Koitan
             }
         }
 
+        private void Start()
+        {
+            //UIの表示
+            for (int i = 0; i < BattleGlobal.MaxPlayerNum; i++)
+            {
+                if (i < players.Count)
+                {
+                    moneyUis[i].SetActive(true);
+                    moneyUis[i].transform.localPosition = new Vector3(1920 / players.Count * (i + 0.5f) - 960, -420);
+                }
+                else
+                {
+                    moneyUis[i].SetActive(false);
+                }
+            }
+            StartCoroutine(HagimariAnim());
+        }
+
         private void OnDestroy()
         {
             instance = null;
@@ -86,9 +120,26 @@ namespace Koitan
         // Update is called once per frame
         void Update()
         {
+            // タイマー処理
+            if (battleProgress == BattleProgress.Battle)
+            {
+                limitSeconds -= Time.deltaTime;
+                if (limitSeconds <= 0)
+                {
+                    limitSeconds = 0;
+                    StartCoroutine(OwatiAnim());
+                }
+                int mm = (int)(limitSeconds / 60);
+                int ss = (int)limitSeconds - mm * 60;
+                int dd = (int)((limitSeconds - (int)limitSeconds) * 100);
+                timerText.text = $"{mm}:{ss:D2}.{dd:D2}";
+            }
+
             for (int i = 0; i < players.Count; i++)
             {
-                KoitanDebug.DisplayBox($"{moneys[i]}", players[i]);
+                //KoitanDebug.DisplayBox($"{moneys[i]}", players[i]);
+                //KoitanDebug.Display($"プレイヤー{i}のお金 = {moneys[i]}\n");
+                moneyTexts[i].text = $"{moneys[i]}G";
             }
             KoitanDebug.Display($"MoneyInstances.Count = {moneyInstances.Count}");
             itemCreateTime += Time.deltaTime;
@@ -115,6 +166,28 @@ namespace Koitan
                     break;
                 }
             }
+        }
+
+        IEnumerator HagimariAnim()
+        {
+            hagimariText.SetActive(true);
+            yield return new WaitForSeconds(4f);
+            hagimariText.SetActive(false);
+            battleProgress = BattleProgress.Battle;
+        }
+
+        IEnumerator OwatiAnim()
+        {
+            owariText.SetActive(true);
+            battleProgress = BattleProgress.AfterBattle;
+            yield return new WaitForSeconds(2f);
+            // リザルトに情報を渡す
+            Result.playerCount = players.Count;
+            for (int i = 0; i < players.Count; i++)
+            {
+                Result.playerMoneys[i] = moneys[i];
+            }
+            SceneManager.LoadScene("Result");
         }
 
         /// <summary>
@@ -147,6 +220,13 @@ namespace Koitan
         private void OnDrawGizmosSelected()
         {
             GizmosExtensions2D.DrawWireRect2D(Vector3.zero, stageWidth, stageHeight);
+        }
+
+        enum BattleProgress
+        {
+            BeforeBattle,
+            Battle,
+            AfterBattle
         }
     }
 }

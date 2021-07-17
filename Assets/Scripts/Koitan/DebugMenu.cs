@@ -59,6 +59,16 @@ namespace KoitanLib
                 KoitanDebug.Display($"FPS {fpsCounter.fps}\n");
             }
 
+            // ”{‘¬
+            if (Input.GetKey(KeyCode.I))
+            {
+                Time.timeScale = 10f;
+            }
+            else
+            {
+                Time.timeScale = 1f;
+            }
+
             if (Input.GetKeyDown(KeyCode.Tab) || KoitanInput.GetDown(ButtonCode.Select))
             {
                 if (isOpen)
