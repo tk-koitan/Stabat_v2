@@ -595,6 +595,7 @@ MonoBehaviour:
   cursorHand: {fileID: 760484388}
   stageSelectHand: {fileID: 0}
   playerController: {fileID: 267694483}
+  backGround: {fileID: 0}
   hadCoin: 0
 --- !u!212 &425267741
 SpriteRenderer:
@@ -1132,7 +1133,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!212 &927537729
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1173,7 +1174,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: -5
-  m_Sprite: {fileID: 21300000, guid: d513a9773b4f07548be5ec1388ab76b1, type: 3}
+  m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -1181,7 +1182,7 @@ SpriteRenderer:
   m_Size: {x: 49.62, y: 27.184393}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!4 &927537730
@@ -1193,7 +1194,7 @@ Transform:
   m_GameObject: {fileID: 927537728}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.4, y: 0.4, z: 0.4}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 9
@@ -1621,6 +1622,7 @@ MonoBehaviour:
   cursorHand: {fileID: 801679133}
   stageSelectHand: {fileID: 0}
   playerController: {fileID: 1094834231}
+  backGround: {fileID: 0}
   hadCoin: 0
 --- !u!212 &1120089477
 SpriteRenderer:
@@ -2462,6 +2464,7 @@ MonoBehaviour:
   cursorHand: {fileID: 1016216008}
   stageSelectHand: {fileID: 0}
   playerController: {fileID: 438558416}
+  backGround: {fileID: 0}
   hadCoin: 0
 --- !u!212 &2028535225
 SpriteRenderer:
@@ -2635,6 +2638,7 @@ MonoBehaviour:
   cursorHand: {fileID: 907388172}
   stageSelectHand: {fileID: 907388174}
   playerController: {fileID: 0}
+  backGround: {fileID: 927537729}
   hadCoin: 0
 --- !u!58 &2032044746
 CircleCollider2D:
