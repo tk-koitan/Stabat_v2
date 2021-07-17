@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using Koitan;
+using UnityEngine.SceneManagement;
 
 public class Chip : MonoBehaviour
 {
@@ -11,8 +12,13 @@ public class Chip : MonoBehaviour
     [SerializeField]
     CursorHand cursorHand;
     [SerializeField]
+    StageSelectHand stageSelectHand;
+    [SerializeField]
     PlayerController playerController;
+    [SerializeField]
+    SpriteRenderer backGround;
     public CursorHand CursorHand { get; private set; }
+    public StageSelectHand StageSelectHand { get; private set; }
     public bool IsDecided { get; private set; }
     public bool hadCoin;
 
@@ -39,6 +45,7 @@ public class Chip : MonoBehaviour
     {
         AllChips.Add(this);
         CursorHand = cursorHand;
+        StageSelectHand = stageSelectHand;
         iniScale = transform.localScale;
         circleCollider2D = GetComponent<CircleCollider2D>();
     }
@@ -61,17 +68,34 @@ public class Chip : MonoBehaviour
 
         foreach (Collider2D col in collisions)
         {
+
             //アイコンに触れてるなら，さらにカーソルおいてるなら
             if (col.tag == "CharaIcon" && !cursorHand.Havecoin)
             {
                 //キャラクター変える
                 int tmp = col.GetComponent<CharaIcon>().CharaID;
                 //表示されたキャラの色変える
-                playerController.ChangeColor(tmp, tmp);
+                if (playerController != null) playerController.ChangeColor(tmp, tmp);
                 //内部での色も変える
                 BattleSetting.charaColorIndexes[CursorHand.ID] = tmp;
 
                 IsDecided = true;
+            }
+            else if (col.tag == "StageIcon" && !stageSelectHand.Havecoin)
+            {
+                DeleteChipsList();
+
+                BattleSetting.battleStageIndex = col.GetComponent<CharaIcon>().CharaID;
+
+                Debug.Log(BattleSetting.battleStageIndex);
+
+                SceneManager.LoadScene("ZakkyScene");
+
+                //IsDecided = true;
+            }
+            if (col.tag == "StageIcon")
+            {
+                backGround.sprite = col.transform.GetChild(0).transform.GetChild(0).GetComponent<SpriteRenderer>().sprite;
             }
         }
     }

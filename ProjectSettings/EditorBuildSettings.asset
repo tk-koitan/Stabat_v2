@@ -26,5 +26,11 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/KoitanLib/Scenes/DebugScene.unity
     guid: d5c62f92208900a4f8715052b0189741
+  - enabled: 1
+    path: Assets/Scenes/ZakkyScene.unity
+    guid: 3a418faa8a464d244b9c12825b8316cc
+  - enabled: 1
+    path: Assets/Scenes/ZakkyScene 1.unity
+    guid: eca152b4bbdde6341a6c634615c3abf1
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 9b5298138b6298b42975f367f1398530, type: 2}

@@ -9,8 +9,7 @@ public class CursorHand : MonoBehaviour
 {
     [SerializeField]
     float cursorVelocity = 100f;
-    //[SerializeField]
-    //Transform kawacoinTrans;
+
     [SerializeField]
     Chip chip;
     [SerializeField]
