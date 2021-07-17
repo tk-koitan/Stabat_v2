@@ -37,10 +37,15 @@ public class StageSelectHand : MonoBehaviour
     void Move()
     {
         //移動入力で速度を加速
-        for (int i = 0; i < 1; i++)
+        Vector2 tmpspd = Vector2.zero;
+        for (int i = 0; i < 4; i++)
         {
-            rigidbody2D.velocity += cursorVelocity * KoitanInput.GetStick(i) * Time.deltaTime;
+            tmpspd += KoitanInput.GetStick(i) * Time.deltaTime;
+            //rigidbody2D.velocity += cursorVelocity * KoitanInput.GetStick(i) * Time.deltaTime;
         }
+        tmpspd = new Vector2(Mathf.Clamp(tmpspd.x, -Time.deltaTime, Time.deltaTime),
+            Mathf.Clamp(tmpspd.y, -Time.deltaTime, Time.deltaTime));
+        rigidbody2D.velocity += cursorVelocity * tmpspd;
 
         //コイン持ってる判定のとき
         if (Havecoin)
@@ -54,7 +59,7 @@ public class StageSelectHand : MonoBehaviour
     void PutChip()
     {
         Chip chiptmp = IsChipCollision();
-        for (int i = 0; i < 1; i++)
+        for (int i = 0; i < 4; i++)
         {
             //A押してかつ範囲内にチップがあるとき
             if ((KoitanInput.GetDown(ButtonCode.A, i) && chiptmp != null))
