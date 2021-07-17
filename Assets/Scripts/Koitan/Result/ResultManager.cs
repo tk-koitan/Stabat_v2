@@ -47,7 +47,7 @@ namespace Koitan
             // ‡ˆÊ‚ª1ˆÊ‚Ìl‚ªŠî€
             for (int i = 0; i < Result.playerCount; i++)
             {
-                moneyUis[i].transform.DOMoveY((float)Result.playerMoneys[i] / moneyMax * 500f, 2f).SetRelative();
+                moneyUis[i].transform.DOLocalMoveY((float)Result.playerMoneys[i] / moneyMax * 500f, 2f).SetRelative();
             }
         }
 
